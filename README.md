@@ -10,8 +10,8 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 * `cmd + z` -> undo
 * `cmd + shift + z` -> redo
 * `cmd + [` -> indent 
-* `cmd + ] `-> unindent
-* `cmd + f `-> search files
+* `cmd + ]` -> unindent
+* `cmd + f` -> search files
 * `cmd + <number>` -> jump to tab 1, tab 2, ...
 * `cmd + alt + left` -> move to next tab
 * `cmd + alt + right` -> move to previos tab
@@ -25,7 +25,6 @@ Some awesome features:
 * Searching will always center on the line it's found in.
 * Search by default incase sensitive, however if you use uppercase character
   incase sensitive search is ignored.
-* Remove search highlights with `<leader>space`.
 
 ## Install & Update
 
@@ -51,6 +50,7 @@ This will just remove the symlinks created previously:
 
 ## Improvements (TODO)
 
+* Freeze base plugins (aka add them as non submodules)
 * Add [ycm](https://github.com/Valloric/YouCompleteMe) (don't make users
   compile it, find a way to include the binary) to enable auto completion by
   default
