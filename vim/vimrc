@@ -1,7 +1,6 @@
 " .vimrc
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
 
-
 execute pathogen#infect()
 syntax on
 filetype plugin indent on
@@ -18,8 +17,16 @@ set nobackup            	" Dont create annoying backup files
 set autoread                    " Read automatically files without asking me anything
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
+set encoding=utf-8              " Set default encoding to UTF-8
+set autowrite                   " Automatically save before :next, :make etc.
 
 set fileformats=unix,dos,mac    " Prefer unix over windows over os9 formats
+
+set showmatch                   " Do not show matching brackets by flickering
+set incsearch                   " Shows the match while typing
+set hlsearch                    " Highlight found searches
+set ignorecase                  " Search incase sensitive...
+set smartcase                   " ... but now when search pattern contains upper case characters
 
 " ----------------------------------------------"
 " MacVim modifications (color, shortcuts,etc..  "
@@ -63,7 +70,37 @@ if has("gui_macvim")
   map <D-9> :tabfirst<Cr>9gt
 endif
 
+" ------------------------------------------"
+" Mappings                                  "
+" ----------------------------------------- "
+"
+" This comes first, because we have mappings that depend on leader
+" With a map leader it's possible to do extra key combinations
+" i.e: <leader>w saves the current file
+let mapleader = ","
+let g:mapleader = ","
 
+" Remove search hilight
+nnoremap <leader><space> :nohlsearch<CR>
 
+" Better split switching
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
+" Fast saving
+nmap <leader>w :w!<cr>
+nmap <leader>q :q!<cr>
+
+" Move up and down on splitted lines (on small width screens)
+map <Up> gk
+map <Down> gj
+map k gk
+map j gj
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+map N Nzz
+map n nzz
 
