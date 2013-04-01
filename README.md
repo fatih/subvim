@@ -18,18 +18,18 @@ If used with MacVim you will get SublimeText-like shortcuts:
 
 Some awesome features:
 
-* Pathogen enabled by default. Install and manage vim plugins with ease.
+* Automatic closing of quotes, parenthesis, brackets, etc (via [delimitMate](https://github.com/Raimondi/delimitMate))
+* Splitting a window will put the new window right or below of the current one.
+* Easily switch between splits with `ctrl + h,j,k,l`.
 * Does not create files like `.swp`.
 * Searching will always center on the line it's found in.
 * Search by default incase sensitive, however if you use uppercase character
   incase sensitive search is ignored.
 * Remove search highlights with `<leader>space`.
-* Easily switch between splits with `ctrl + h,j,k,l`.
-* Splitting a window will put the new window right or below of the current one.
 
-## Install & Update:
+## Install & Update
 
-Run these commands:
+Just clone and execute `make`:
 
     git clone --recursive https://github.com/fatih/vim-awesome.git
     cd vim-awesome
@@ -42,7 +42,7 @@ problems. And finally you can always update it easily with:
     cd vim-awesome
     git pull origin master
 
-## Uninstall:
+## Uninstall
 
 This will just remove the symlinks created previously:
 
