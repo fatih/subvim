@@ -53,6 +53,7 @@ This will just remove the symlinks created previously:
 ## Improvements (TODO)
 
 * Freeze base plugins (aka add them as non submodules)
+* Add Linux-compatible option
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips))
 * Make it compatible with [vim-sensible](https://github.com/tpope/vim-sensible)?
