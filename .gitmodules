@@ -1,3 +1,9 @@
 [submodule "vim/bundle/molokai"]
 	path = vim/bundle/molokai
 	url = git://github.com/tomasr/molokai.git
+[submodule "vim/bundle/ctrlp.vim"]
+	path = vim/bundle/ctrlp.vim
+	url = git://github.com/kien/ctrlp.vim.git
+[submodule "vim/bundle/powerline"]
+	path = vim/bundle/powerline
+	url = git://github.com/Lokaltog/powerline.git

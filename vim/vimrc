@@ -19,6 +19,7 @@ set splitright                  " Split vertical windows right to the current wi
 set splitbelow                  " Split horizontal windows below to the current windows
 set encoding=utf-8              " Set default encoding to UTF-8
 set autowrite                   " Automatically save before :next, :make etc.
+set laststatus=2
 
 set fileformats=unix,dos,mac    " Prefer unix over windows over os9 formats
 
@@ -104,3 +105,28 @@ map j gj
 map N Nzz
 map n nzz
 
+" ----------------------------------------- "
+" Plugin configs 			    "
+" ----------------------------------------- "
+
+" Open ctrlp with cmd+p
+macmenu File.Print key=<nop>
+let g:ctrlp_map = '<D-p>'
+let g:ctrlp_cmd = 'CtrlP'		" Open it in most recenlty used mode (the most important option everyone want!)
+let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
+let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
+let g:ctrlp_max_height = 10		" maxiumum height of match window
+let g:ctrlp_switch_buffer = 'Et'	" jump to a file if its open already
+let g:ctrlp_use_caching = 1		" enable caching
+let g:ctrlp_show_hidden = 1		" show me dotfiles
+let g:ctrlp_mruf_max = 250		" number of recently opened files
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+let g:Powerline_symbols = 'fancy'

@@ -19,13 +19,13 @@ Some awesome features:
 * Pathogen enabled by default. Install and manage vim plugins with ease.
 * Does not create files like `.swp`.
 * Searching will always center on the line it's found in.
-* Search by default incase sensitive, however if you use uppercase character,
-  incase sensitive search is ignored
-* Remove search highlights with `<leader>space`
-* Easily switch between splits with `ctrl + h,j,k,l`
+* Search by default incase sensitive, however if you use uppercase character
+  incase sensitive search is ignored.
+* Remove search highlights with `<leader>space`.
+* Easily switch between splits with `ctrl + h,j,k,l`.
 * Splitting a window will put the new window right or below of the current one.
 
-## Install && Update:
+## Install & Update:
 
 Run these commands:
 
