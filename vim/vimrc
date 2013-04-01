@@ -1,0 +1,64 @@
+" .vimrc
+set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
+
+
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+set noerrorbells                " No beeps
+set number                      " Show line numbers
+set backspace=indent,eol,start  " makes backspace key more powerful.
+set showmode                    " Show current mode.
+set cmdheight=1                 " The commandbar height
+set noswapfile                  " Don't use swapfile
+set nobackup            " Dont create annoying backup files
+
+
+
+" ----------------------------------------------"
+" MacVim modifications (color, shortcuts,etc..  "
+" ----------------------------------------------"
+
+set background=dark
+colorscheme molokai
+let g:molokai_original = 1
+
+" No toolbars, menu or scrollbars in the GUI
+if has('gui_macvim')
+   set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+   set clipboard+=unnamed
+   set vb t_vb=
+   set guioptions-=m  "no menu
+   set guioptions-=T  "no toolbar
+   set guioptions-=l
+   set guioptions-=L
+   set guioptions-=r  "no scrollbar
+   set guioptions-=R
+end
+
+if has("gui_macvim")
+  " Move  with cmd+alt
+  nmap <D-M-RIGHT> gt
+  nmap <D-M-LEFT> gT
+
+  " Indent lines with cmd+[ and cmd+]
+  map <D-]> >>
+  map <D-[> <<
+  
+  "switch between tabs with cmd+1, cmd+2,..."
+  map <D-1> :tabfirst<Cr>
+  map <D-2> :tabfirst<Cr>gt
+  map <D-3> :tabfirst<Cr>3gt
+  map <D-4> :tabfirst<Cr>4gt
+  map <D-5> :tabfirst<Cr>5gt
+  map <D-6> :tabfirst<Cr>6gt
+  map <D-7> :tabfirst<Cr>7gt
+  map <D-8> :tabfirst<Cr>8gt
+  map <D-9> :tabfirst<Cr>9gt
+endif
+
+
+
+
+
