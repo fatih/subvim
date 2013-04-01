@@ -8,13 +8,18 @@ filetype plugin indent on
 
 set noerrorbells                " No beeps
 set number                      " Show line numbers
-set backspace=indent,eol,start  " makes backspace key more powerful.
+set backspace=indent,eol,start  " Makes backspace key more powerful.
+set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
+
 set cmdheight=1                 " The commandbar height
 set noswapfile                  " Don't use swapfile
-set nobackup            " Dont create annoying backup files
+set nobackup            	" Dont create annoying backup files
+set autoread                    " Read automatically files without asking me anything
+set splitright                  " Split vertical windows right to the current windows
+set splitbelow                  " Split horizontal windows below to the current windows
 
-
+set fileformats=unix,dos,mac    " Prefer unix over windows over os9 formats
 
 " ----------------------------------------------"
 " MacVim modifications (color, shortcuts,etc..  "

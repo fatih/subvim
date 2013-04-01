@@ -5,15 +5,12 @@ added as a git submodule.
 
 If used with MacVim you will got Sublime-like shortcuts for some plugins:
 
-cmd + p -> go to anything... (ctlrp plugin)
-cmd + / -> comment out lines (nerdcommenter plugin)
-cmd + [ -> indent 
-cmd + ] -> unindent
-cmd + f -> search files (builtin macvim)
-cmd + 1,2,3,.. -> jump to tab 1, tab 2, ...
-cmd + alt + left -> move to next tab
-cmd + alt + right -> move to previos tab
-
+* `cmd + [` -> indent 
+* `cmd + ] `-> unindent
+* `cmd + f `-> search files (builtin macvim)
+* `cmd + <number>` -> jump to tab 1, tab 2, ...
+* `cmd + alt + left` -> move to next tab
+* `cmd + alt + right` -> move to previos tab
 
 Install:
 
