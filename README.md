@@ -19,6 +19,7 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 Some awesome features:
 
 * Full featured autocompletion (via [YouCompleteMe](https://github.com/Valloric/YouCompleteMe))
+* Restore latest state (tab, files) when quitting and restarting again. (via [vim-session](https://github.com/inkarkat/vim-session))
 * Automatic closing of quotes, parenthesis, brackets, etc (via [delimitMate](https://github.com/Raimondi/delimitMate))
 * Splitting a window will put the new window right or below of the current one.
 * Easily switch between splits with `ctrl + h,j,k,l`.
@@ -59,8 +60,7 @@ This will just remove the symlinks created previously:
 * Make it compatible with [vim-sensible](https://github.com/tpope/vim-sensible)?
 * Make it always as simple as possible without breaking any plugins. Users
   should add plugins theirself.
-* Might integrate nerdtree, vim-sessions, etc...
-* Reopen closed buffer, window or tab ...
+* Might integrate nerdtree,  etc...
 
 ## License
 
