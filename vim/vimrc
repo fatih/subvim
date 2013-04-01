@@ -2,6 +2,7 @@
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
 
 execute pathogen#infect()
+execute pathogen#helptags()
 syntax on
 filetype plugin indent on
 
@@ -51,6 +52,10 @@ if has('gui_macvim')
 end
 
 if has("gui_macvim")
+  " Open ctrlp with cmd+p
+  macmenu File.Print key=<nop>
+  let g:ctrlp_map = '<D-p>'
+
   " Move  with cmd+alt
   nmap <D-M-RIGHT> gt
   nmap <D-M-LEFT> gT
@@ -109,10 +114,7 @@ map n nzz
 " Plugin configs 			    "
 " ----------------------------------------- "
 
-" Open ctrlp with cmd+p
-macmenu File.Print key=<nop>
-let g:ctrlp_map = '<D-p>'
-let g:ctrlp_cmd = 'CtrlP'		" Open it in most recenlty used mode (the most important option everyone want!)
+let g:ctrlp_cmd = 'CtrlPMRU'		" Open it in most recenlty used mode (the most important option everyone want!)
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
 let g:ctrlp_max_height = 10		" maxiumum height of match window
