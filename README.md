@@ -51,6 +51,7 @@ This will just remove the symlinks created previously:
 
 ## Improvements (TODO)
 
+* Add Linux-compatible option
 * Add [ycm](https://github.com/Valloric/YouCompleteMe) (don't make users
   compile it, find a way to include the binary) to enable auto completion by
   default
