@@ -16,3 +16,6 @@
 [submodule "vim/bundle/YouCompleteMe"]
 	path = vim/bundle/YouCompleteMe
 	url = git://github.com/Valloric/YouCompleteMe.git
+[submodule "vim/bundle/vim-session"]
+	path = vim/bundle/vim-session
+	url = git://github.com/inkarkat/vim-session.git
