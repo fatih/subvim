@@ -114,6 +114,9 @@ map j gj
 map N Nzz
 map n nzz
 
+" Act like D and C
+nnoremap Y y$
+
 " ----------------------------------------- "
 " Plugin configs 			    "
 " ----------------------------------------- "
