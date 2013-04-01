@@ -5,7 +5,8 @@ MacVim. All vim plugins are added as a git submodule.
 
 If used with MacVim you will get SublimeText-like shortcuts:
 
-* `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim) plugin)
+* `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
+* `cmd + /` -> toggle comment (via [nerdcommenter](https://github.com/scrooloose/nerdcommenter))
 * `cmd + z` -> undo
 * `cmd + shift + z` -> redo
 * `cmd + [` -> indent 

@@ -60,6 +60,10 @@ if has("gui_macvim")
   nmap <D-M-RIGHT> gt
   nmap <D-M-LEFT> gT
 
+  " Comment lines with cmd+/
+  vmap <D-/> ,c<space>gv
+  map <D-/> ,c<space>
+
   " Indent lines with cmd+[ and cmd+]
   map <D-]> >>
   map <D-[> <<
