@@ -131,12 +131,6 @@ let g:ctrlp_use_caching = 1		" enable caching
 let g:ctrlp_show_hidden = 1		" show me dotfiles
 let g:ctrlp_mruf_max = 250		" number of recently opened files
 
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-"let g:ctrlp_custom_ignore = {
-  "\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  "\ 'file': '\v\.(exe|so|dll)$',
-  "\ 'link': 'some_bad_symbolic_links',
-  "\ }
-
 let g:Powerline_symbols = 'fancy'
+
+let g:ycm_autoclose_preview_window_after_completion = 1

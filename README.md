@@ -18,6 +18,7 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 
 Some awesome features:
 
+* Full featured autocompletion (via [YouCompleteMe](https://github.com/Valloric/YouCompleteMe))
 * Automatic closing of quotes, parenthesis, brackets, etc (via [delimitMate](https://github.com/Raimondi/delimitMate))
 * Splitting a window will put the new window right or below of the current one.
 * Easily switch between splits with `ctrl + h,j,k,l`.
@@ -28,7 +29,8 @@ Some awesome features:
 
 ## Install & Update
 
-Just clone and execute `make`:
+Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
+`make`:
 
     git clone --recursive https://github.com/fatih/vim-awesome.git
     cd vim-awesome
@@ -51,9 +53,6 @@ This will just remove the symlinks created previously:
 ## Improvements (TODO)
 
 * Freeze base plugins (aka add them as non submodules)
-* Add [ycm](https://github.com/Valloric/YouCompleteMe) (don't make users
-  compile it, find a way to include the binary) to enable auto completion by
-  default
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips))
 * Make it compatible with [vim-sensible](https://github.com/tpope/vim-sensible)?
