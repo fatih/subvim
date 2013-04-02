@@ -57,10 +57,10 @@ This will just remove the symlinks created previously:
 
 ### How do I add my own plugins?
 
-Just clone your favorite plugin into `vim-awesome/custom_plugins/`. Below is an
+Just clone your favorite plugin into `vim-awesome/vim/custom_plugins/`. Below is an
 example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
 
-    cd vim-awesome/custom_plugins
+    cd vim-awesome/vim/custom_plugins
     git clone git://github.com/tpope/vim-fugitive.git
 
 That's it! Vim-awesome will automatically start your plugin after you restart vim
