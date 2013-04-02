@@ -24,9 +24,7 @@ Some awesome features:
 * Restore latest state (tab, files) when quitting and restarting again. (via [vim-session](https://github.com/inkarkat/vim-session))
 * Automatic closing of quotes, parenthesis, brackets, etc (via [delimitMate](https://github.com/Raimondi/delimitMate))
 * Splitting a window will put the new window right or below of the current one.
-* Easily switch between splits with `ctrl + h,j,k,l`.
 * Does not create files like `.swp`.
-* Searching will always center on the line it's found in.
 * Search by default incase sensitive, however if you use uppercase character
   incase sensitive search is ignored.
 
@@ -57,25 +55,25 @@ This will just remove the symlinks created previously:
 
 ### How do I add my own settings and plugins?
 
-All custom settings are stored in the folder `vim/custom`. You have to create
+All custom settings are stored in the folder `vim/custom/`. You have to create
 it for the first time.
 
-* For settings, add your custom vimrc settings to the file `vim/custom/vimrc`. Just create it and add custom vim settings. An example file might be:
+* For *settings*, add your custom vimrc settings to the file `vim/custom/vimrc`. Create it for the first time. An example file might be:
+```
+" ~/.vim/custom/vimrc ...my own custom settings
+let mapleader = ","
+set indent
+set tabstop = 4
+```
 
-	" ~/.vim/custom/vimrc , my own custom settings...
-	let mapleader = ","
-	set indent
-	set tabstop = 4
-	
-
-* For plugins, just clone your favorite plugin into `vim/custom/`.
+* For *plugins*, just clone your favorite plugin into `vim/custom/`.
   Below is an example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
+```
+cd vim/custom
+git clone git://github.com/tpope/vim-fugitive.git
+```
 
-    cd vim/custom
-    git clone git://github.com/tpope/vim-fugitive.git
-
-
-That's it! Vim-awesome will automatically start your settings and plugins after you restart
+That's it! vim-awesome will automatically start your settings and plugins after you restart
 vim again.
 
 ### They are million other vim modifications, why should I use vim-awesome?
