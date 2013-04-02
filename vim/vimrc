@@ -1,7 +1,7 @@
 " .vimrc
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
 
-execute pathogen#infect()
+execute pathogen#infect('internal_plugins/{}')
 execute pathogen#helptags()
 syntax on
 filetype plugin indent on
