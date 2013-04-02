@@ -82,7 +82,6 @@ your own needs (like adding custom plugins)
 
 ## Improvements (TODO)
 
-* Freeze base plugins (aka add them as non submodules)
 * Add Linux-compatible option
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips))
