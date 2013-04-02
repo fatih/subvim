@@ -12,7 +12,6 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 * `cmd + <number>` -> jump to tab 1, tab 2, ...
 * `cmd + alt + left` -> move to next tab
 * `cmd + alt + right` -> move to previos tab
-
 * `cmd + z` -> undo
 * `cmd + shift + z` -> redo
 * `cmd + s` -> save file
@@ -61,8 +60,8 @@ This will just remove the symlinks created previously:
 Just clone your favorite plugin into `vim-awesome/custom_plugins/`. Below is an
 example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
 
-   cd vim-awesome/custom_plugins
-   git clone git://github.com/tpope/vim-fugitive.git
+    cd vim-awesome/custom_plugins
+    git clone git://github.com/tpope/vim-fugitive.git
 
 That's it! Vim-awesome will automatically start your plugin after you restart vim
 again.
