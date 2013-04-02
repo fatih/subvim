@@ -55,16 +55,28 @@ This will just remove the symlinks created previously:
 
 ## FAQ
 
-### How do I add my own plugins?
+### How do I add my own settings and plugins?
 
-Just clone your favorite plugin into `vim-awesome/vim/custom_plugins/`. Below is an
-example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
+All custom settings are stored in the folder `vim/custom`. You have to create
+it for the first time.
 
-    cd vim-awesome/vim/custom_plugins
+* For settings, add your custom vimrc settings to the file `vim/custom/vimrc`. Just create it and add custom vim settings. An example file might be:
+
+	" ~/.vim/custom/vimrc , my own custom settings...
+	let mapleader = ","
+	set indent
+	set tabstop = 4
+	
+
+* For plugins, just clone your favorite plugin into `vim/custom/`.
+  Below is an example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
+
+    cd vim/custom
     git clone git://github.com/tpope/vim-fugitive.git
 
-That's it! Vim-awesome will automatically start your plugin after you restart vim
-again.
+
+That's it! Vim-awesome will automatically start your settings and plugins after you restart
+vim again.
 
 ### They are million other vim modifications, why should I use vim-awesome?
 
@@ -78,7 +90,7 @@ fancy shortcuts that breaks any of your plugins.
 vim-awesome also has some very nice shortcuts, that gives you the same
 experience as using SublimeText. These shortcuts are not interfering with any
 of default vim shortcuts. You just install vim-awesome and then modifiy it for
-your own needs (like adding custom plugins)
+your own needs (adding your own custom settings)
 
 ## Improvements (TODO)
 

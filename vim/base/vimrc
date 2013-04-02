@@ -1,9 +1,11 @@
 " .vimrc
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
 
-execute pathogen#infect('internal_plugins/{}')
-execute pathogen#infect('custom_plugins/{}')
+execute pathogen#infect('base/{}')
+execute pathogen#infect('custom/{}')
+source $HOME/.vim/custom/vimrc
 execute pathogen#helptags()
+
 syntax on
 filetype plugin indent on
 
@@ -82,48 +84,11 @@ if has("gui_macvim")
   map <D-9> :tabfirst<Cr>9gt
 endif
 
-" ------------------------------------------"
-" Mappings                                  "
-" ----------------------------------------- "
-"
-" This comes first, because we have mappings that depend on leader
-" With a map leader it's possible to do extra key combinations
-" i.e: <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
-
-" Remove search hilight
-nnoremap <leader><space> :nohlsearch<CR>
-
-" Better split switching
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
-" Fast saving
-nmap <leader>w :w!<cr>
-nmap <leader>q :q!<cr>
-
-" Move up and down on splitted lines (on small width screens)
-map <Up> gk
-map <Down> gj
-map k gk
-map j gj
-
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-map N Nzz
-map n nzz
-
-" Act like D and C
-nnoremap Y y$
-
 " ----------------------------------------- "
 " Plugin configs 			    "
 " ----------------------------------------- "
 
-let g:ctrlp_cmd = 'CtrlPMRU'		" Open it in most recenlty used mode (the most important option everyone want!)
+let g:ctrlp_cmd = 'CtrlPMixed'		" Open it in most recenlty used mode (the most important option everyone want!)
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
 let g:ctrlp_max_height = 10		" maxiumum height of match window

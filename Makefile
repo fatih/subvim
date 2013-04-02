@@ -1,6 +1,6 @@
 all:
 	[ -d ~/.vim/ ] || ln -s $(PWD)/vim/ ~/.vim
-	[ -f ~/.vimrc ] || ln -s $(PWD)/vim/vimrc ~/.vimrc
+	[ -f ~/.vimrc ] || ln -s $(PWD)/vim/base/vimrc ~/.vimrc
 
 clean:
 	rm -f ~/.vimrc ~/.vim 
