@@ -1,0 +1,3 @@
+If you're looking for the simplest way to get the plug-in up and running, download [the latest ZIP archive](http://peterodding.com/code/vim/downloads/session.zip) from [Vim Online](http://www.vim.org/scripts/script.php?script_id=3150), unzip that in `~/.vim/` (on UNIX) or `%USERPROFILE%\vimfiles` (on Windows) and you're good to go.
+
+If you're using git and/or [Pathogen](http://www.vim.org/scripts/script.php?script_id=2332), [Vundle](https://github.com/gmarik/vundle) or a similar plug-in manager and want to keep the plug-in up to date using git, you can use the GitHub repository directly, it should just work.
