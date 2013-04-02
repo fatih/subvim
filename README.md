@@ -7,14 +7,17 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 
 * `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
 * `cmd + /` -> toggle comment (via [nerdcommenter](https://github.com/scrooloose/nerdcommenter))
-* `cmd + z` -> undo
-* `cmd + shift + z` -> redo
 * `cmd + [` -> indent 
 * `cmd + ]` -> unindent
-* `cmd + f` -> search files
 * `cmd + <number>` -> jump to tab 1, tab 2, ...
 * `cmd + alt + left` -> move to next tab
 * `cmd + alt + right` -> move to previos tab
+
+* `cmd + z` -> undo
+* `cmd + shift + z` -> redo
+* `cmd + s` -> save file
+* `cmd + w` -> close
+* `cmd + f` -> search 
 
 Some awesome features:
 
@@ -50,6 +53,33 @@ This will just remove the symlinks created previously:
 
     cd vim-awesome
     make clean
+
+## FAQ
+
+### How do I add my own plugins?
+
+Just clone your favorite plugin into `vim-awesome/custom_plugins/`. Below is an
+example of installing [vim-fugitive](https://github.com/tpope/vim-fugitive):
+
+   cd vim-awesome/custom_plugins
+   git clone git://github.com/tpope/vim-fugitive.git
+
+That's it! Vim-awesome will automatically start your plugin after you restart vim
+again.
+
+### They are million other vim modifications, why should I use vim-awesome?
+
+vim-awesome tries to simple as possible. Only plugins they are worth and are
+accepted to be usable are integrated(like autocomplete, autosave sessions,
+etc..). These are fully integrated and integrated. It means you just start
+vim-awesome and benefit from all the features explained above (no compiling or
+extra configurations are needed). Beside that nothing is added. There are no
+fancy shortcuts that breaks any of your plugins.
+
+vim-awesome also has some very nice shortcuts, that gives you the same
+experience as using SublimeText. These shortcuts are not interfering with any
+of default vim shortcuts. You just install vim-awesome and then modifiy it for
+your own needs (like adding custom plugins)
 
 ## Improvements (TODO)
 
