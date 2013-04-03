@@ -7,7 +7,7 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 
 * `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
 * `cmd + r` -> go to symbol (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
-* `cmd + /` -> toggle comment (via [nerdcommenter](https://github.com/scrooloose/nerdcommenter))
+* `cmd + /` -> toggle comment (via [tcomment](https://github.com/tomtom/tcomment_vim))
 * `cmd + [` -> indent 
 * `cmd + ]` -> unindent
 * `cmd + <number>` -> jump to tab 1, tab 2, ...
