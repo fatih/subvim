@@ -72,8 +72,11 @@ if has("gui_macvim")
   vmap <D-/> :TComment<cr>gv
 
   " Indent lines with cmd+[ and cmd+]
-  map <D-]> >>gv
-  map <D-[> <<gv
+  map <D-]> >>
+  map <D-[> <<
+
+  vmap <D-[> <gv
+  vmap <D-]> >gv
   
   "switch between tabs with cmd+1, cmd+2,..."
   map <D-1> :tabfirst<Cr>
