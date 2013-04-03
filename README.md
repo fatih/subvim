@@ -6,6 +6,7 @@ MacVim.
 If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeText-like shortcuts:
 
 * `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
+* `cmd + r` -> go to symbol (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
 * `cmd + /` -> toggle comment (via [nerdcommenter](https://github.com/scrooloose/nerdcommenter))
 * `cmd + [` -> indent 
 * `cmd + ]` -> unindent
