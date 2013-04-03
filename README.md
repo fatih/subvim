@@ -94,6 +94,11 @@ experience as using SublimeText. These shortcuts are not interfering with any
 of default vim shortcuts. You just install vim-awesome and then modifiy it for
 your own needs (adding your own custom settings)
 
+### What people say about vim-awesome
+
+* romainl: we don't like your project much but we provide help anyway. That's the vim spirit. (#vim on freenode)
+* a friend: an awesome project, thank you!
+
 ## Improvements (TODO)
 
 * Add Linux-compatible option
