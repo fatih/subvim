@@ -15,7 +15,6 @@ set backspace=indent,eol,start  " Makes backspace key more powerful.
 set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
 
-set cmdheight=1                 " The commandbar height
 set noswapfile                  " Don't use swapfile
 set nobackup            	" Dont create annoying backup files
 set autoread                    " Read automatically files without asking me anything
@@ -38,7 +37,7 @@ set smartcase                   " ... but now when search pattern contains upper
 " MacVim modifications (color, shortcuts,etc..  "
 " ----------------------------------------------"
 
-set background=dark
+" set background=dark
 colorscheme molokai
 let g:molokai_original = 1
 
@@ -63,6 +62,10 @@ if has("gui_macvim")
   " Open Go to symbol (via tags)
   nmap <D-r> :CtrlPTag<cr>
 
+  " Go to file
+  macm File.New\ Tab key=<nop>
+  nmap <D-t> :CtrlP<cr>
+
   " Move  with cmd+alt
   nmap <D-M-RIGHT> gt
   nmap <D-M-LEFT> gT
@@ -74,9 +77,11 @@ if has("gui_macvim")
   " Indent lines with cmd+[ and cmd+]
   map <D-]> >>
   map <D-[> <<
-
   vmap <D-[> <gv
   vmap <D-]> >gv
+
+  "Open sidebar with cmd+k
+  map <D-k> :NERDTreeToggle<CR>
   
   "switch between tabs with cmd+1, cmd+2,..."
   map <D-1> :tabfirst<Cr>
@@ -91,10 +96,10 @@ if has("gui_macvim")
 endif
 
 " ----------------------------------------- "
-" Plugin configs 			    "
+" Plugin configs 			    			"
 " ----------------------------------------- "
 
-let g:ctrlp_cmd = 'CtrlPMixed'			" open it in most recenlty used mode (the most important option everyone want!)
+let g:ctrlp_cmd = 'CtrlPMixed'			" search anything (in files, buffers and MRU files at the same time.)
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0		" show the match window at the top of the screen
 let g:ctrlp_max_height = 10				" maxiumum height of match window

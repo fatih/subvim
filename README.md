@@ -3,11 +3,14 @@
 Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
-If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeText-like shortcuts:
+If used with [MacVim](https://code.google.com/p/macvim/) you will get
+SublimeText-like features with the same shortcuts:
 
-* `cmd + p` -> go to anything (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
-* `cmd + r` -> go to symbol (via [ctrlp.vim](https://github.com/kien/ctrlp.vim))
-* `cmd + /` -> toggle comment (via [tcomment](https://github.com/tomtom/tcomment_vim))
+* `cmd + p` -> go to anything
+* `cmd + t` -> go to file
+* `cmd + r` -> go to symbol
+* `cmd + k` -> show side bar 
+* `cmd + /` -> toggle comment
 * `cmd + [` -> indent 
 * `cmd + ]` -> unindent
 * `cmd + <number>` -> jump to tab 1, tab 2, ...
@@ -19,11 +22,11 @@ If used with [MacVim](https://code.google.com/p/macvim/) you will get SublimeTex
 * `cmd + w` -> close
 * `cmd + f` -> search 
 
-Some awesome features:
+Some more awesome features:
 
-* Full featured autocompletion (via [YouCompleteMe](https://github.com/Valloric/YouCompleteMe))
-* Restore latest state (tab, files) when quitting and restarting again. (via [vim-session](https://github.com/inkarkat/vim-session))
-* Automatic closing of quotes, parenthesis, brackets, etc (via [delimitMate](https://github.com/Raimondi/delimitMate))
+* Full featured autocompletion
+* Restore latest state (tab, files) when quitting and restarting again.
+* Automatic closing of quotes, parenthesis, brackets, etc
 * Splitting a window will put the new window right or below of the current one.
 * Does not create files like `.swp`.
 * Search by default incase sensitive, however if you use uppercase character
@@ -64,7 +67,7 @@ it for the first time.
 " ~/.vim/custom/vimrc ...my own custom settings
 let mapleader = ","
 set indent
-set tabstop = 4
+set tabstop=4
 ```
 
 * For *plugins*, just clone your favorite plugin into `vim/custom/`.
@@ -95,8 +98,7 @@ your own needs (adding your own custom settings)
 
 * Add Linux-compatible option
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
-  [UltiSnip](https://github.com/SirVer/ultisnips))
-* Make it compatible with [vim-sensible](https://github.com/tpope/vim-sensible)?
+  [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
   should add plugins theirself.
 * Might integrate nerdtree,  etc...
