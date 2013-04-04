@@ -1,14 +1,11 @@
-
 ```
 ____    ____  __  .___  ___.           ___      ____    __    ____  _______      _______.  ______   .___  ___.  _______ 
 \   \  /   / |  | |   \/   |          /   \     \   \  /  \  /   / |   ____|    /       | /  __  \  |   \/   | |   ____|
  \   \/   /  |  | |  \  /  |  ___    /  ^  \     \   \/    \/   /  |  |__      |   (----`|  |  |  | |  \  /  | |  |__   
   \      /   |  | |  |\/|  | |___|  /  /_\  \     \            /   |   __|      \   \    |  |  |  | |  |\/|  | |   __|  
    \    /    |  | |  |  |  |       /  _____  \     \    /\    /    |  |____ .----)   |   |  `--'  | |  |  |  | |  |____ 
-    \__/     |__| |__|  |__|      /__/     \__\     \__/  \__/     |_______||_______/     \______/  |__|  |__| |_______|                                                                                                                     
+    \__/     |__| |__|  |__|      /__/     \__\     \__/  \__/     |_______||_______/     \______/  |__|  |__| |_______| 
 ```
-
-# Vim Awesome
 
 Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
@@ -47,7 +44,7 @@ Some more awesome features:
 Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
 `make`:
 
-    git clone --recursive https://github.com/fatih/vim-awesome.git
+    git clone https://github.com/fatih/vim-awesome.git
     cd vim-awesome
     make
 
