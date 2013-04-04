@@ -60,7 +60,7 @@ if has("gui_macvim")
   let g:ctrlp_map = '<D-p>'
 
   " Open Go to symbol (via tags)
-  nmap <D-r> :CtrlPTag<cr>
+  nmap <D-r> :MyCtrlPTag<cr>
 
   " Go to file
   macm File.New\ Tab key=<nop>
@@ -106,17 +106,32 @@ let g:ctrlp_cmd = 'CtrlPMixed'			" search anything (in files, buffers and MRU fi
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0		" show the match window at the top of the screen
 let g:ctrlp_max_height = 10				" maxiumum height of match window
-let g:ctrlp_switch_buffer = 'Et'		" jump to a file if its open already
+let g:ctrlp_switch_buffer = 'et'		" jump to a file if its open already
 let g:ctrlp_use_caching = 1				" enable caching
 let g:ctrlp_clear_cache_on_exit=0  		" speed up by not removing clearing cache evertime
 let g:ctrlp_show_hidden = 1				" show me dotfiles
 let g:ctrlp_mruf_max = 250 				" number of recently opened files
 
-"Open always files in new tab
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-t>'],
-    \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
-    \ }
+func! MyPrtMappings()
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("e")': ['<c-t>'],
+        \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
+        \ }
+endfunc
+
+func! MyCtrlPTag()
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+        \ 'AcceptSelection("t")': ['<c-t>'],
+        \ }
+    CtrlPTag
+endfunc
+
+let g:ctrlp_buffer_func = { 'exit': 'MyPrtMappings' }
+
+com! MyCtrlPTag call MyCtrlPTag()
+
+
 
 let g:Powerline_symbols = 'fancy'
 
