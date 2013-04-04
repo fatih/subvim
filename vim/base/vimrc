@@ -93,6 +93,9 @@ if has("gui_macvim")
   map <D-7> :tabfirst<Cr>7gt
   map <D-8> :tabfirst<Cr>8gt
   map <D-9> :tabfirst<Cr>9gt
+
+  " Stop completion with enter, instead of default ctrl+y
+  inoremap <expr> <Enter> pumvisible() ? "\<C-Y>" : "\<Enter>"
 endif
 
 " ----------------------------------------- "

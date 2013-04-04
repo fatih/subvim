@@ -119,6 +119,10 @@ your own needs (adding your own custom settings)
   should add plugins theirself.
 * Might integrate nerdtree,  etc...
 
+## Credits
+
+romainl, osse
+
 ## License
 
 Same as VIM license. For more info see `:help license`.
