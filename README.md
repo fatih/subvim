@@ -44,7 +44,7 @@ Some more awesome features:
 Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
 `make`:
 
-    git clone --recursive https://github.com/fatih/vim-awesome.git
+    git clone https://github.com/fatih/vim-awesome.git
     cd vim-awesome
     make
 
