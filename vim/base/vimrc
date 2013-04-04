@@ -39,6 +39,7 @@ set smartcase                   " ... but now when search pattern contains upper
 
 colorscheme molokai
 let g:molokai_original = 1
+highlight SignColumn guibg=#272822   
 
 " No toolbars, menu or scrollbars in the GUI
 if has('gui_macvim')
@@ -70,12 +71,12 @@ if has("gui_macvim")
   nmap <D-M-LEFT> gT
 
   " Comment lines with cmd+/
-  map <D-/> :TComment<cr>gv
+  map <D-/> :TComment<cr>
   vmap <D-/> :TComment<cr>gv
 
   " Indent lines with cmd+[ and cmd+]
-  map <D-]> >>
-  map <D-[> <<
+  nmap <D-]> >>
+  nmap <D-[> <<
   vmap <D-[> <gv
   vmap <D-]> >gv
 
