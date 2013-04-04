@@ -10,6 +10,7 @@ ____    ____  __  .___  ___.           ___      ____    __    ____  _______     
 Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
+
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts:
 
@@ -29,7 +30,10 @@ SublimeText-like features with the same shortcuts:
 * `cmd + w` -> close
 * `cmd + f` -> search 
 
-Some more awesome features:
+Some more awesome features (in the demo gif below you see the automatic restoring your latest MacVim state):
+
+![Vim-awesome](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-autoload-session.gif)
+
 
 * Full featured autocompletion
 * Restore latest state (tab, files) when quitting and restarting again.
