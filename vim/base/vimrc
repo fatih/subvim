@@ -16,7 +16,7 @@ set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
 
 set noswapfile                  " Don't use swapfile
-set nobackup            	" Dont create annoying backup files
+set nobackup            		" Dont create annoying backup files
 set autoread                    " Read automatically files without asking me anything
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
@@ -37,7 +37,6 @@ set smartcase                   " ... but now when search pattern contains upper
 " MacVim modifications (color, shortcuts,etc..  "
 " ----------------------------------------------"
 
-" set background=dark
 colorscheme molokai
 let g:molokai_original = 1
 
