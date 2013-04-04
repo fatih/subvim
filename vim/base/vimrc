@@ -94,8 +94,9 @@ if has("gui_macvim")
   map <D-8> :tabfirst<Cr>8gt
   map <D-9> :tabfirst<Cr>9gt
 
-  " Stop completion with enter, instead of default ctrl+y
-  inoremap <expr> <Enter> pumvisible() ? "\<C-Y>" : "\<Enter>"
+  " Stop completion with enter, in addition to default ctrl+y
+  imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
+
 endif
 
 " ----------------------------------------- "
@@ -140,3 +141,7 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
 let g:session_default_to_last = 1
+
+"create line break when pressing enter
+let g:delimitMate_expand_cr = 1
+let g:delimitMate_expand_space = 1
