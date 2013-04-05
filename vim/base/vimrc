@@ -2,8 +2,10 @@
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
 
 execute pathogen#infect('base/{}')
-execute pathogen#infect('custom/{}')
-source $HOME/.vim/custom/vimrc
+if isdirectory(expand("$HOME/.vim/custom/"))
+  execute pathogen#infect('custom/{}')
+  source $HOME/.vim/custom/vimrc
+endif
 execute pathogen#helptags()
 
 syntax on

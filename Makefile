@@ -4,7 +4,7 @@ all:
 	[ -f ~/.vimrc ] || ln -s $(PWD)/vim/base/vimrc ~/.vimrc
 
 clean:
-	rm ~/.vimrc 
-	rm -f ~/.vim 
+	[ -d ~/.vim/ ] || rm -f ~/.vim 
+	[ -f ~/.vimrc ] || rm ~/.vimrc 
 
 .PHONY: all
