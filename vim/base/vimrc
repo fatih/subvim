@@ -129,19 +129,20 @@ func! MyCtrlPTag()
         \ }
     CtrlPBufTag
 endfunc
-
 let g:ctrlp_buffer_func = { 'exit': 'MyPrtMappings' }
+com! MyCtrlPTag call MyCtrlPTag()
 " TODO: include ctags to vim-awesome as binary
 " TODO: add javascript and some other languages who doesn't have ctags support
 " coffee: https://gist.github.com/michaelglass/5210282
 " go: http://stackoverflow.com/a/8236826/462233 
+" objc:  http://www.gregsexton.org/2011/04/objective-c-exuberant-ctags-regex/
 let g:ctrlp_buftag_types = {
 \ 'go'     	   : '--language-force=go --golang-types=ftv',
 \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
-\ 'markdown'   : '--language-force=markdown --markdown-types=hik'
+\ 'markdown'   : '--language-force=markdown --markdown-types=hik',
+\ 'objc'       : '--language-force=objc --objc-types=mpci'
 \ }
 
-com! MyCtrlPTag call MyCtrlPTag()
 
 let g:Powerline_symbols = 'fancy'
 
