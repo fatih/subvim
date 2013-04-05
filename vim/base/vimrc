@@ -127,14 +127,21 @@ func! MyCtrlPTag()
         \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
         \ 'AcceptSelection("t")': ['<c-t>'],
         \ }
-    CtrlPTag
+    CtrlPBufTag
 endfunc
 
 let g:ctrlp_buffer_func = { 'exit': 'MyPrtMappings' }
+" TODO: include ctags to vim-awesome as binary
+" TODO: add javascript and some other languages who doesn't have ctags support
+" coffee: https://gist.github.com/michaelglass/5210282
+" go: http://stackoverflow.com/a/8236826/462233 
+let g:ctrlp_buftag_types = {
+\ 'go'     	   : '--language-force=go --golang-types=ftv',
+\ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
+\ 'markdown'   : '--language-force=markdown --markdown-types=hik'
+\ }
 
 com! MyCtrlPTag call MyCtrlPTag()
-
-
 
 let g:Powerline_symbols = 'fancy'
 

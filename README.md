@@ -10,7 +10,6 @@ ____    ____  __  .___  ___.           ___      ____    __    ____  _______     
 Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
-
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts:
 
@@ -34,7 +33,6 @@ Some more awesome features (in the demo gif below you see the automatic restorin
 
 ![Vim-awesome](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-autoload-session.gif)
 
-
 * Full featured autocompletion
 * Restore latest state (tab, files) when quitting and restarting again.
 * Automatic closing of quotes, parenthesis, brackets, etc
@@ -52,9 +50,9 @@ Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
     cd vim-awesome
     make
 
-This will create a symlink from these folder to `~/.vim` and `~./vimrc`.
-Thus you can put this folder in your favorite place, move it around without any
-problems. And finally you can always update it easily with:
+This will create a symlink from these folder to `~/.vim`, `~/.vimrc` and
+`~/.ctags`. Thus you can put this folder in your favorite place, move it
+around without any problems. And finally you can always update it easily with:
 
     cd vim-awesome
     git pull origin master
@@ -114,6 +112,7 @@ your own needs (adding your own custom settings)
 
 * Add Linux-compatible option
 * Autoload of vimrc settings (no need for restart anymore)
+* Add requirements
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
