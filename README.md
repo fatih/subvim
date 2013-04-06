@@ -11,8 +11,7 @@ Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
-SublimeText-like features with the same shortcuts. You don't need anything to
-install:
+SublimeText-like features with the same shortcuts without installing or compiling any external library:
 
 ![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
 
