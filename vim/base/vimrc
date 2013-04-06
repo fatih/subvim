@@ -155,11 +155,13 @@ com! MyCtrlPTag call MyCtrlPTag()
 " coffee: https://gist.github.com/michaelglass/5210282
 " go: http://stackoverflow.com/a/8236826/462233 
 " objc:  http://www.gregsexton.org/2011/04/objective-c-exuberant-ctags-regex/
+" rust: https://github.com/mozilla/rust/blob/master/src/etc/ctags.rust
 let g:ctrlp_buftag_types = {
 \ 'go'     	   : '--language-force=go --golang-types=ftv',
 \ 'coffee'     : '--language-force=coffee --coffee-types=cmfvf',
 \ 'markdown'   : '--language-force=markdown --markdown-types=hik',
-\ 'objc'       : '--language-force=objc --objc-types=mpci'
+\ 'objc'       : '--language-force=objc --objc-types=mpci',
+\ 'rc'         : '--language-force=rust --rust-types=fTm'
 \ }
 
 

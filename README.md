@@ -36,7 +36,7 @@ SublimeText-like features with the same shortcuts:
 Some more awesome features:
 
 * On the fly "Goto symbol, definition" feature. No need to install external
-plugins or binaries. [41](http://ctags.sourceforge.net/languages.html) languages + Go,
+plugins or binaries. [41](http://ctags.sourceforge.net/languages.html) languages + Go, Rust, 
 Coffeescript, Objective-C, Markdown are supported.
 * Full featured autocompletion
 * Restore latest state (tab, files) when quitting and restarting again.
