@@ -26,11 +26,11 @@ set showmode                    " Show current mode.
 
 set noswapfile                  " Don't use swapfile
 set nobackup            		" Dont create annoying backup files
-set autoread                    " Read automatically files without asking me anything
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
 set encoding=utf-8              " Set default encoding to UTF-8
 set autowrite                   " Automatically save before :next, :make etc.
+set autoread                    " Read automatically files without asking me anything
 set laststatus=2
 
 set fileformats=unix,dos,mac    " Prefer unix over windows over os9 formats
@@ -43,27 +43,24 @@ set smartcase                   " ... but now when search pattern contains upper
 
 
 " ----------------------------------------------"
-" MacVim modifications (color, shortcuts,etc..  "
+" MacVim modifications (color, shortcuts, etc.. "
 " ----------------------------------------------"
-
 colorscheme molokai
 let g:molokai_original = 1
 highlight SignColumn guibg=#272822   
 
-" No toolbars, menu or scrollbars in the GUI
-if has('gui_macvim')
-   set guifont=Source\ Code\ Pro\ for\ Powerline:h13
-   set clipboard+=unnamed
-   set vb t_vb=
-   set guioptions-=m  "no menu
-   set guioptions-=T  "no toolbar
-   set guioptions-=l
-   set guioptions-=L
-   set guioptions-=r  "no scrollbar
-   set guioptions-=R
-end
-
 if has("gui_macvim")
+  " No toolbars, menu or scrollbars in the GUI
+  set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+  set clipboard+=unnamed
+  set vb t_vb=
+  set guioptions-=m  "no menu
+  set guioptions-=T  "no toolbar
+  set guioptions-=l
+  set guioptions-=L
+  set guioptions-=r  "no scrollbar
+  set guioptions-=R
+
   " Open ctrlp with cmd+p
   macmenu File.Print key=<nop>
   let g:ctrlp_map = '<D-p>'
@@ -91,8 +88,8 @@ if has("gui_macvim")
   vmap <D-]> >gv
 
   "Open sidebar with cmd+k
-  map <D-k> :NERDTreeToggle<CR>
-  
+  map <D-k> :NERDTreeTabsToggle<CR>
+
   "switch between tabs with cmd+1, cmd+2,..."
   map <D-1> :tabfirst<Cr>
   map <D-2> :tabfirst<Cr>gt
@@ -176,3 +173,5 @@ let g:session_default_to_last = 1
 "create line break when pressing enter
 let g:delimitMate_expand_cr = 1
 let g:delimitMate_expand_space = 1
+
+let g:nerdtree_tabs_open_on_gui_startup = 0
