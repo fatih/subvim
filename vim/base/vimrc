@@ -70,6 +70,7 @@ if has("gui_macvim")
 
   " Open Go to symbol (via tags)
   nmap <D-r> :MyCtrlPTag<cr>
+  nmap <D-R> :CtrlPBufTagAll<cr>
 
   " Go to file
   macm File.New\ Tab key=<nop>
@@ -146,8 +147,10 @@ func! MyCtrlPTag()
         \ }
     CtrlPBufTag
 endfunc
+
 let g:ctrlp_buffer_func = { 'exit': 'MyPrtMappings' }
 com! MyCtrlPTag call MyCtrlPTag()
+
 " TODO: add javascript and some other languages who doesn't have ctags support
 " coffee: https://gist.github.com/michaelglass/5210282
 " go: http://stackoverflow.com/a/8236826/462233 

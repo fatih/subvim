@@ -16,26 +16,27 @@ SublimeText-like features with the same shortcuts:
 
 ![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
 
-* `cmd + p` -> go to anything
-* `cmd + t` -> go to file
-* `cmd + r` -> go to symbol
-* `cmd + k` -> show side bar 
-* `cmd + /` -> toggle comment
-* `cmd + [` -> indent 
-* `cmd + ]` -> unindent
-* `cmd + <number>` -> jump to tab 1, tab 2, ...
-* `cmd + alt + left` -> move to next tab
-* `cmd + alt + right` -> move to previos tab
-* `cmd + z` -> undo
-* `cmd + shift + z` -> redo
-* `cmd + s` -> save file
-* `cmd + w` -> close
-* `cmd + f` -> search 
+* `cmd + p` -> Goto Anything...
+* `cmd + t` -> Goto File...
+* `cmd + r` -> Goto Symbol on  current file...
+* `cmd + shift + r` -> Goto Symbol on all files...
+* `cmd + k` -> Show side bar 
+* `cmd + /` -> Toggle comment
+* `cmd + [` -> Indent 
+* `cmd + ]` -> Unindent
+* `cmd + <number>` -> Jump to tab 1, tab 2, ...
+* `cmd + alt + left` -> Move to next tab
+* `cmd + alt + right` -> Move to previous tab
+* `cmd + z` -> Undo
+* `cmd + shift + z` -> Redo
+* `cmd + s` -> Save file
+* `cmd + w` -> Close file
+* `cmd + f` -> Search and replace
 
 Some more awesome features:
 
-* On the fly "go to symbol, definition" feature. No need to install external
-plugins. [41](http://ctags.sourceforge.net/languages.html) languages + Go,
+* On the fly "Goto symbol, definition" feature. No need to install external
+plugins or binaries. [41](http://ctags.sourceforge.net/languages.html) languages + Go,
 Coffeescript, Objective-C, Markdown are supported.
 * Full featured autocompletion
 * Restore latest state (tab, files) when quitting and restarting again.
@@ -123,7 +124,6 @@ your own needs (adding your own custom settings)
   [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
   should add plugins theirself.
-* Might integrate nerdtree,  etc...
 
 ## Credits
 
