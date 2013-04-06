@@ -11,8 +11,8 @@ Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
-SublimeText-like features with the same shortcuts:
-
+SublimeText-like features with the same shortcuts. You don't need anything to
+install:
 
 ![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
 
@@ -35,16 +35,16 @@ SublimeText-like features with the same shortcuts:
 
 Some more awesome features:
 
-* On the fly "Goto symbol, definition" feature. No need to install external
-plugins or binaries. [41](http://ctags.sourceforge.net/languages.html) languages + Go, Rust, 
-Coffeescript, Objective-C, Markdown are supported.
-* Full featured autocompletion
+* SublimeText like colorscheme
+* On the fly "Goto symbol, definition" feature. .
+[41](http://ctags.sourceforge.net/languages.html) languages and Go, Rust,
+Coffeescript, Objective-C, Markdown are supported. No need to install external
+plugins or binaries.
+* Full featured autocompletion via YMC. No need to compile the YCM plugin,
+vim-awesome has already pre-compiled binaries included.
 * Restore latest state (tab, files) when quitting and restarting again.
-* Automatic closing of quotes, parenthesis, brackets, etc
-* Splitting a window will put the new window right or below of the current one.
-* Does not create files like `.swp`.
-* Search by default incase sensitive, however if you use uppercase character
-  incase sensitive search is ignored.
+* Automatic closing of quotes, parenthesis, brackets and etc..
+* ... many other fixes and improvements.
 
 ## Install & Update
 
@@ -55,14 +55,14 @@ these two options are supported. Just clone the repo and execute `make`:
     cd vim-awesome
     make
     
-This will create a symlink from these folder to `~/.vim`, `~/.vimrc` and
-`~/.ctags`. Thus you can put this folder in your favorite place, move it
-around without any problems. 
+This will create symlinks from the `vim-awesome` folder to `~/.vim`, `~/.vimrc`
+and `~/.ctags`. Thus you can put the `vim-awesome` folder in your favorite
+place.
 
 And finally you can always update it easily with:
 
-    cd vim-awesome
     git pull origin master
+	make
 
 ## Uninstall
 
@@ -93,22 +93,31 @@ cd vim/custom
 git clone git://github.com/tpope/vim-fugitive.git
 ```
 
-That's it! vim-awesome will automatically start your settings and plugins after you restart
+That's it! `vim-awesome` will automatically start your settings and plugins after you restart
 vim again.
 
-### They are million other vim modifications, why should I use vim-awesome?
+### They are million other vim distributions, why should I use vim-awesome?
 
 vim-awesome tries to simple as possible. Only plugins they are worth and are
-accepted to be usable are integrated(like autocomplete, autosave sessions,
+accepted to be usable are integrated (like autocomplete, autosave sessions,
 etc..). These are fully integrated and integrated. It means you just start
-vim-awesome and benefit from all the features explained above (no compiling or
-extra configurations are needed). Beside that nothing is added. There are no
-fancy shortcuts that breaks any of your plugins.
+vim-awesome and benefit from all the features explained above, there is no
+binary compiling or installing extra stuff. All these kind of stuff is
+integrated.
 
-vim-awesome also has some very nice shortcuts, that gives you the same
+vim-awesome has some very nice shortcuts, that gives you the same
 experience as using SublimeText. These shortcuts are not interfering with any
-of default vim shortcuts. You just install vim-awesome and then modifiy it for
-your own needs (adding your own custom settings)
+of default vim shortcuts. It's aimed for a fully Mac OS X experience. I'm
+thinking to make it Linux compatible (gvim) in the future.
+
+There are:
+
+* No custom shortcuts
+* No leader keybindings that breaks your stuff
+* No unnecessary plugins that makes your life harder than easier.
+* No automatic downloading of integrated plugins. Because what works will
+always works. You always will get the same experience. That means if an
+integrated plugin is not superior, it will replaced by superior ones.
 
 ### What people say about vim-awesome
 
@@ -119,11 +128,10 @@ your own needs (adding your own custom settings)
 
 * Add Linux-compatible option
 * Autoload of vimrc settings (no need for restart anymore)
-* Add requirements
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
-  should add plugins theirself.
+  should custoimize and add plugins theirself.
 
 ## Credits
 
