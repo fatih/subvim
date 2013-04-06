@@ -31,16 +31,19 @@ let [s:pref, s:opts] = ['g:ctrlp_buftag_', {
 	\ 'types': ['s:usr_types', {}],
 	\ }]
 
-let s:bins = [
-	\ 'ctags-exuberant',
-	\ 'exuberant-ctags',
-	\ 'exctags',
-	\ '/usr/local/bin/ctags',
-	\ '/opt/local/bin/ctags',
-	\ 'ctags',
-	\ 'ctags.exe',
-	\ 'tags',
-	\ ]
+let s:bins = [expand("$HOME/.vim/binary/ctags/5.8/bin/ctags")]
+
+" let s:bins = [
+" 	\ '~/.vim/binary/ctags/5.8/bin/ctags',
+" 	\ 'ctags-exuberant',
+" 	\ 'exuberant-ctags',
+" 	\ 'exctags',
+" 	\ '/usr/local/bin/ctags',
+" 	\ '/opt/local/bin/ctags',
+" 	\ 'ctags',
+" 	\ 'ctags.exe',
+" 	\ 'tags',
+" 	\ ]
 
 let s:types = {
 	\ 'asm'    : '%sasm%sasm%sdlmt',

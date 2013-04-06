@@ -7,9 +7,16 @@ if isdirectory(expand("$HOME/.vim/custom/"))
   source $HOME/.vim/custom/vimrc
 endif
 execute pathogen#helptags()
-
 syntax on
 filetype plugin indent on
+
+" check for ctags folder, if not exist extract our ctags binary
+if !isdirectory(expand("$HOME/.vim/binary/ctags/"))
+	let ctags_bottle_dir =  expand("$HOME/.vim/binary/")
+	let ctags_bottle_file = expand("$HOME/.vim/binary/ctags-5.8.mountain_lion.bottle.tar.gz")
+	execute "cd ".ctags_bottle_dir
+	execute "!tar xfv ".ctags_bottle_file
+endif
 
 set noerrorbells                " No beeps
 set number                      " Show line numbers
@@ -96,6 +103,16 @@ if has("gui_macvim")
   map <D-8> :tabfirst<Cr>8gt
   map <D-9> :tabfirst<Cr>9gt
 
+  imap <D-1> <esc>:tabfirst<Cr>
+  imap <D-2> <esc>:tabfirst<Cr>gt
+  imap <D-3> <esc>:tabfirst<Cr>3gt
+  imap <D-4> <esc>:tabfirst<Cr>4gt
+  imap <D-5> <esc>:tabfirst<Cr>5gt
+  imap <D-6> <esc>:tabfirst<Cr>6gt
+  imap <D-7> <esc>:tabfirst<Cr>7gt
+  imap <D-8> <esc>:tabfirst<Cr>8gt
+  imap <D-9> <esc>:tabfirst<Cr>9gt
+
   " Stop completion with enter, in addition to default ctrl+y
   imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
@@ -131,7 +148,6 @@ func! MyCtrlPTag()
 endfunc
 let g:ctrlp_buffer_func = { 'exit': 'MyPrtMappings' }
 com! MyCtrlPTag call MyCtrlPTag()
-" TODO: include ctags to vim-awesome as binary
 " TODO: add javascript and some other languages who doesn't have ctags support
 " coffee: https://gist.github.com/michaelglass/5210282
 " go: http://stackoverflow.com/a/8236826/462233 

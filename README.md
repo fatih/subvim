@@ -53,12 +53,7 @@ Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
 
 This will create a symlink from these folder to `~/.vim`, `~/.vimrc` and
 `~/.ctags`. Thus you can put this folder in your favorite place, move it
-around without any problems. For **go to symbol** feature you need `ctags`. 
-If you don't have it just install it via:
-
-
-    brew install ctags-exuberant
-
+around without any problems. 
 
 And finally you can always update it easily with:
 
