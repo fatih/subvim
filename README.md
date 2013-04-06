@@ -8,7 +8,7 @@
 ```
 
 Customized to be awesome by default. It is improved to be used on Mac OS X and
-MacVim. 
+MacVim. (note: Linux version is on the todo list, I'll work on it asap)
 
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts without installing or compiling any external library:
