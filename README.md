@@ -35,9 +35,9 @@ SublimeText-like features with the same shortcuts without installing or compilin
 Some more awesome features:
 
 * SublimeText like colorscheme
-* On the fly "Goto symbol, definition" feature. .
-[41](http://ctags.sourceforge.net/languages.html) languages and Go, Rust,
-Coffeescript, Objective-C, Markdown are supported. No need to install external
+* On the fly "Goto symbol, definition" feature.
+[41](http://ctags.sourceforge.net/languages.html) languages together with Go, Rust,
+Coffeescript, Objective-C and Markdown are supported. No need to install external
 plugins or binaries.
 * Full featured autocompletion via YMC. No need to compile the YCM plugin,
 vim-awesome has already pre-compiled binaries included.
