@@ -1,10 +1,11 @@
 ```
-____    ____  __  .___  ___.           ___      ____    __    ____  _______      _______.  ______   .___  ___.  _______ 
-\   \  /   / |  | |   \/   |          /   \     \   \  /  \  /   / |   ____|    /       | /  __  \  |   \/   | |   ____|
- \   \/   /  |  | |  \  /  |  ___    /  ^  \     \   \/    \/   /  |  |__      |   (----`|  |  |  | |  \  /  | |  |__   
-  \      /   |  | |  |\/|  | |___|  /  /_\  \     \            /   |   __|      \   \    |  |  |  | |  |\/|  | |   __|  
-   \    /    |  | |  |  |  |       /  _____  \     \    /\    /    |  |____ .----)   |   |  `--'  | |  |  |  | |  |____ 
-    \__/     |__| |__|  |__|      /__/     \__\     \__/  \__/     |_______||_______/     \______/  |__|  |__| |_______| 
+     _______. __    __  .______   ____    ____  __  .___  ___. 
+    /       ||  |  |  | |   _  \  \   \  /   / |  | |   \/   | 
+   |   (----`|  |  |  | |  |_)  |  \   \/   /  |  | |  \  /  | 
+    \   \    |  |  |  | |   _  <    \      /   |  | |  |\/|  | 
+.----)   |   |  `--'  | |  |_)  |    \    /    |  | |  |  |  | 
+|_______/     \______/  |______/      \__/     |__| |__|  |__| 
+                                                             
 ```
 
 Customized to be awesome by default. It is improved to be used on Mac OS X and
@@ -13,7 +14,7 @@ MacVim.
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts without installing or compiling any external library:
 
-![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
+![subvim screenhhost](https://raw.github.com/fatih/subvim/master/_assets/subvim-screenshot.png)
 
 * `cmd + p` -> Goto Anything...
 * `cmd + t` -> Goto File...
@@ -40,7 +41,7 @@ Some more awesome features:
 Coffeescript, Objective-C and Markdown are supported. No need to install external
 plugins or binaries.
 * Full featured autocompletion via YMC. No need to compile the YCM plugin,
-vim-awesome has already pre-compiled binaries included.
+subvim has already pre-compiled binaries included.
 * Restore latest state (tab, files) when quitting and restarting again.
 * Automatic closing of quotes, parenthesis, brackets and etc..
 * ... many other fixes and improvements.
@@ -50,12 +51,12 @@ vim-awesome has already pre-compiled binaries included.
 Be sure you are using the latest **OS X 10.8** and **MacVim**. Currently only
 these two options are supported. Just clone the repo and execute `make`:
 
-    git clone https://github.com/fatih/vim-awesome.git
-    cd vim-awesome
+    git clone https://github.com/fatih/subvim.git
+    cd subvim
     make
     
-This will create symlinks from the `vim-awesome` folder to `~/.vim`, `~/.vimrc`
-and `~/.ctags`. Thus you can put the `vim-awesome` folder in your favorite
+This will create symlinks from the `subvim` folder to `~/.vim`, `~/.vimrc`
+and `~/.ctags`. Thus you can put the `subvim` folder in your favorite
 place.
 
 And finally you can always update it easily with:
@@ -67,7 +68,7 @@ And finally you can always update it easily with:
 
 This will just remove the symlinks created previously:
 
-    cd vim-awesome
+    cd subvim
     make clean
 
 ## FAQ
@@ -92,19 +93,19 @@ cd vim/custom
 git clone git://github.com/tpope/vim-fugitive.git
 ```
 
-That's it! `vim-awesome` will automatically start your settings and plugins after you restart
+That's it! `subvim` will automatically start your settings and plugins after you restart
 vim again.
 
-### They are million other vim distributions, why should I use vim-awesome?
+### They are million other vim distributions, why should I use subvim?
 
-vim-awesome tries to simple as possible. Only plugins they are worth and are
+subvim tries to simple as possible. Only plugins they are worth and are
 accepted to be usable are integrated (like autocomplete, autosave sessions,
 etc..). These are fully integrated and integrated. It means you just start
-vim-awesome and benefit from all the features explained above, there is no
+subvim and benefit from all the features explained above, there is no
 binary compiling or installing extra stuff. All these kind of stuff is
 integrated.
 
-vim-awesome has some very nice shortcuts, that gives you the same
+subvim has some very nice shortcuts, that gives you the same
 experience as using SublimeText. These shortcuts are not interfering with any
 of default vim shortcuts. It's aimed for a fully Mac OS X experience. I'm
 thinking to make it Linux compatible (gvim) in the future.
@@ -118,7 +119,7 @@ There are:
 always works. You always will get the same experience. That means if an
 integrated plugin is not superior, it will replaced by superior ones.
 
-### What people say about vim-awesome
+### What people say about subvim
 
 * romainl: we don't like your project much but we provide help anyway. That's the vim spirit. (#vim on freenode)
 * a friend: an awesome project, thank you!
