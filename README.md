@@ -11,8 +11,7 @@ Customized to be awesome by default. It is improved to be used on Mac OS X and
 MacVim. 
 
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
-SublimeText-like features with the same shortcuts. You don't need anything to
-install:
+SublimeText-like features with the same shortcuts without installing or compiling any external library:
 
 ![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
 
@@ -36,9 +35,9 @@ install:
 Some more awesome features:
 
 * SublimeText like colorscheme
-* On the fly "Goto symbol, definition" feature. .
-[41](http://ctags.sourceforge.net/languages.html) languages and Go, Rust,
-Coffeescript, Objective-C, Markdown are supported. No need to install external
+* On the fly "Goto symbol, definition" feature.
+[41](http://ctags.sourceforge.net/languages.html) languages together with Go, Rust,
+Coffeescript, Objective-C and Markdown are supported. No need to install external
 plugins or binaries.
 * Full featured autocompletion via YMC. No need to compile the YCM plugin,
 vim-awesome has already pre-compiled binaries included.
