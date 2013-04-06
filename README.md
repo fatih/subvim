@@ -13,6 +13,9 @@ MacVim.
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts:
 
+
+![vim-awesome screenhhost](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-screenshot.png)
+
 * `cmd + p` -> go to anything
 * `cmd + t` -> go to file
 * `cmd + r` -> go to symbol
@@ -29,10 +32,11 @@ SublimeText-like features with the same shortcuts:
 * `cmd + w` -> close
 * `cmd + f` -> search 
 
-Some more awesome features (in the demo gif below you see the automatic restoring your latest MacVim state):
+Some more awesome features:
 
-![Vim-awesome](https://raw.github.com/fatih/vim-awesome/master/_assets/vim-awesome-autoload-session.gif)
-
+* On the fly "go to symbol, definition" feature. No need to install external
+plugins. [41](http://ctags.sourceforge.net/languages.html) languages + Go,
+Coffeescript, Objective-C, Markdown are supported.
 * Full featured autocompletion
 * Restore latest state (tab, files) when quitting and restarting again.
 * Automatic closing of quotes, parenthesis, brackets, etc
@@ -43,14 +47,13 @@ Some more awesome features (in the demo gif below you see the automatic restorin
 
 ## Install & Update
 
-Be sure you are using the latest **OS X 10.8**. Just clone the repo and execute
-`make`:
+Be sure you are using the latest **OS X 10.8** and **MacVim**. Currently only
+these two options are supported. Just clone the repo and execute `make`:
 
     git clone https://github.com/fatih/vim-awesome.git
     cd vim-awesome
     make
     
-
 This will create a symlink from these folder to `~/.vim`, `~/.vimrc` and
 `~/.ctags`. Thus you can put this folder in your favorite place, move it
 around without any problems. 
