@@ -25,21 +25,21 @@ set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
 
 set noswapfile                  " Don't use swapfile
-set nobackup            		" Dont create annoying backup files
+set nobackup            		" Don't create annoying backup files
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
 set encoding=utf-8              " Set default encoding to UTF-8
 set autowrite                   " Automatically save before :next, :make etc.
-set autoread                    " Read automatically files without asking me anything
+set autoread                    " Automatically reread changed files without asking me anything
 set laststatus=2
 
-set fileformats=unix,dos,mac    " Prefer unix over windows over os9 formats
+set fileformats=unix,dos,mac    " Prefer Unix over Windows over OS 9 formats
 
 set showmatch                   " Do not show matching brackets by flickering
 set incsearch                   " Shows the match while typing
 set hlsearch                    " Highlight found searches
-set ignorecase                  " Search incase sensitive...
-set smartcase                   " ... but now when search pattern contains upper case characters
+set ignorecase                  " Search case insensitive...
+set smartcase                   " ... but not when search pattern contains upper case characters
 
 
 " ----------------------------------------------"
@@ -124,7 +124,7 @@ let g:ctrlp_cmd = 'CtrlPMixed'			" search anything (in files, buffers and MRU fi
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0		" show the match window at the top of the screen
 let g:ctrlp_max_height = 10				" maxiumum height of match window
-let g:ctrlp_switch_buffer = 'et'		" jump to a file if its open already
+let g:ctrlp_switch_buffer = 'et'		" jump to a file if it's open already
 let g:ctrlp_use_caching = 1				" enable caching
 let g:ctrlp_clear_cache_on_exit=0  		" speed up by not removing clearing cache evertime
 let g:ctrlp_show_hidden = 1				" show me dotfiles
