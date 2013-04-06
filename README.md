@@ -5,7 +5,6 @@
     \   \    |  |  |  | |   _  <    \      /   |  | |  |\/|  | 
 .----)   |   |  `--'  | |  |_)  |    \    /    |  | |  |  |  | 
 |_______/     \______/  |______/      \__/     |__| |__|  |__| 
-                                                             
 ```
 
 Customized to be awesome by default. It is improved to be used on Mac OS X and
@@ -135,7 +134,7 @@ integrated plugin is not superior, it will replaced by superior ones.
 
 ## Credits
 
-romainl, osse
+romainl, osse, rking
 
 ## License
 
