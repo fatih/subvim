@@ -45,9 +45,7 @@ set smartcase                   " ... but now when search pattern contains upper
 " ----------------------------------------------"
 " MacVim modifications (color, shortcuts, etc.. "
 " ----------------------------------------------"
-colorscheme molokai
 let g:molokai_original = 1
-highlight SignColumn guibg=#272822   
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
@@ -62,7 +60,6 @@ if has("gui_macvim")
   set guioptions-=R
 
   " Open ctrlp with cmd+p
-  macmenu File.Print key=<nop>
   let g:ctrlp_map = '<D-p>'
 
   " Open Go to symbol (via tags)
@@ -70,7 +67,6 @@ if has("gui_macvim")
   nmap <D-R> :CtrlPBufTagAll<cr>
 
   " Go to file
-  macm File.New\ Tab key=<nop>
   nmap <D-t> :CtrlP<cr>
 
   " Move  with cmd+alt
