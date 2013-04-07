@@ -8,7 +8,7 @@
 ```
 
 Customized to be awesome by default. It is improved to be used on Mac OS X and
-MacVim. 
+MacVim. (note: Linux version is on the todo list, I'll work on it asap)
 
 If used with [MacVim](https://code.google.com/p/macvim/) you will get
 SublimeText-like features with the same shortcuts without installing or compiling any external library:
@@ -36,8 +36,8 @@ Some more awesome features:
 
 * SublimeText like colorscheme
 * On the fly "Goto symbol, definition" feature.
-[41](http://ctags.sourceforge.net/languages.html) languages together with Go, Rust,
-Coffeescript, Objective-C and Markdown are supported. No need to install external
+[41](http://ctags.sourceforge.net/languages.html) languages, including Go, Rust,
+Coffeescript, Objective-C and Markdown, are supported. No need to install external
 plugins or binaries.
 * Full featured autocompletion via YMC. No need to compile the YCM plugin,
 subvim has already pre-compiled binaries included.
@@ -95,19 +95,18 @@ git clone git://github.com/tpope/vim-fugitive.git
 That's it! `subvim` will automatically start your settings and plugins after you restart
 vim again.
 
-### They are million other vim distributions, why should I use subvim?
+### There are million other vim distributions, why should I use subvim?
 
-subvim tries to simple as possible. Only plugins they are worth and are
+subvim tries to be simple as possible. Only plugins that are worth and are
 accepted to be usable are integrated (like autocomplete, autosave sessions,
-etc..). These are fully integrated and integrated. It means you just start
-subvim and benefit from all the features explained above, there is no
-binary compiling or installing extra stuff. All these kind of stuff is
-integrated.
+etc..). It means you just start subvim and benefit from all the features 
+explained above. There is no binary compiling or installing extra stuff. All
+these are integrated.
 
-subvim has some very nice shortcuts, that gives you the same
-experience as using SublimeText. These shortcuts are not interfering with any
-of default vim shortcuts. It's aimed for a fully Mac OS X experience. I'm
-thinking to make it Linux compatible (gvim) in the future.
+subvim has some very nice shortcuts that gives you the same
+experience as using SublimeText. These shortcuts do no interfere with any
+default vim shortcuts. It's aimed for a full Mac OS X experience. I'm
+thinking about making subvim Linux compatible (gvim) in the future.
 
 There are:
 
