@@ -45,7 +45,11 @@ set smartcase                   " ... but not when search pattern contains upper
 " ----------------------------------------------"
 " MacVim modifications (color, shortcuts, etc.. "
 " ----------------------------------------------"
-let g:molokai_original = 1
+"http://stackoverflow.com/questions/14802689/macvim-wont-load-specific-color-scheme-by-default
+let macvim_skip_colorscheme=1
+let g:molokai_original=1
+colorscheme molokai
+highlight SignColumn guibg=#272822   
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
