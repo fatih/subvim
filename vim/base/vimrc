@@ -111,6 +111,9 @@ if has("gui_macvim")
   imap <D-8> <esc>:tabfirst<Cr>8gt
   imap <D-9> <esc>:tabfirst<Cr>9gt
 
+  " Select text whit shift
+  let macvim_hig_shift_movement = 1
+
   " Stop completion with enter, in addition to default ctrl+y
   imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
