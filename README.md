@@ -121,6 +121,10 @@ integrated plugin is not superior, it will replaced by superior ones.
 
 * romainl: we don't like your project much but we provide help anyway. That's the vim spirit. (#vim on freenode)
 * a friend: an awesome project, thank you!
+* addy osmani: So hot. If you're a hardcore Vim user that's been tempted by Sublime, Subvim
+gives you SublimeText-like features including shortcuts, color scheme, support
+for 41 languages, state, autocompletion via YMC and more, Great work +Fatih
+Arslan! 
 
 ## Improvements (TODO)
 
@@ -133,7 +137,7 @@ integrated plugin is not superior, it will replaced by superior ones.
 
 ## Credits
 
-romainl, osse, rking
+romainl, osse, rking, #vim on freenode
 
 ## License
 

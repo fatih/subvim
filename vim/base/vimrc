@@ -7,6 +7,7 @@ if isdirectory(expand("$HOME/.vim/custom/"))
   source $HOME/.vim/custom/vimrc
 endif
 execute pathogen#helptags()
+
 syntax on
 filetype plugin indent on
 
@@ -66,16 +67,23 @@ if has("gui_macvim")
   " Open ctrlp with cmd+p
   let g:ctrlp_map = '<D-p>'
 
-  " Open Go to symbol (via tags)
+  " Open goto symbol on current buffer
   nmap <D-r> :MyCtrlPTag<cr>
-  nmap <D-R> :CtrlPBufTagAll<cr>
+  imap <D-r> <esc>:MyCtrlPTag<cr>
 
-  " Go to file
+  " Open goto symbol on all buffers
+  imap <D-R> :CtrlPBufTagAll<cr>
+  nmap <D-R> <esc>:CtrlPBufTagAll<cr>
+
+  " Open goto file
   nmap <D-t> :CtrlP<cr>
+  imap <D-t> <esc>:CtrlP<cr>
 
   " Move  with cmd+alt
   nmap <D-M-RIGHT> gt
   nmap <D-M-LEFT> gT
+  imap <D-M-RIGHT> <esc>gt
+  imap <D-M-LEFT> <esc>gT
 
   " Comment lines with cmd+/
   map <D-/> :TComment<cr>
