@@ -72,8 +72,8 @@ if has("gui_macvim")
   imap <D-r> <esc>:MyCtrlPTag<cr>
 
   " Open goto symbol on all buffers
-  imap <D-R> :CtrlPBufTagAll<cr>
-  nmap <D-R> <esc>:CtrlPBufTagAll<cr>
+  nmap <D-R> :CtrlPBufTagAll<cr>
+  imap <D-R> <esc>:CtrlPBufTagAll<cr>
 
   " Open goto file
   nmap <D-t> :CtrlP<cr>
