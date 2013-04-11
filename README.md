@@ -39,7 +39,7 @@ Some more awesome features:
 [41](http://ctags.sourceforge.net/languages.html) languages, including Go, Rust,
 Coffeescript, Objective-C and Markdown, are supported. No need to install external
 plugins or binaries.
-* Full featured autocompletion via YMC. No need to compile the YCM plugin,
+* Full featured autocompletion via YCM. No need to compile the YCM plugin,
 subvim has already pre-compiled binaries included.
 * Restore latest state (tab, files) when quitting and restarting again.
 * Automatic closing of quotes, parenthesis, brackets and etc..
