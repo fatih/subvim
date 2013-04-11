@@ -5,4 +5,8 @@ if has("gui_macvim")
 
   " Disable new tab shortcut for 'goto file...'
   macmenu File.New\ Tab key=<nop>
+	
+  " Move  with cmd+alt
+  macm Window.Select\ Previous\ Tab  key=<D-M-LEFT>
+  macm Window.Select\ Next\ Tab	   key=<D-M-RIGHT>
 endif

@@ -54,7 +54,7 @@ highlight SignColumn guibg=#272822
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
-  set guifont=Source\ Code\ Pro\ for\ Powerline:h13
+  set guifont=Source\ Code\ Pro\ for\ Powerline:h13 "TODO: include these fonts by default
   set clipboard+=unnamed
   set vb t_vb=
   set guioptions-=m  "no menu
@@ -78,12 +78,6 @@ if has("gui_macvim")
   " Open goto file
   nmap <D-t> :CtrlP<cr>
   imap <D-t> <esc>:CtrlP<cr>
-
-  " Move  with cmd+alt
-  nmap <D-M-RIGHT> gt
-  nmap <D-M-LEFT> gT
-  imap <D-M-RIGHT> <esc>gt
-  imap <D-M-LEFT> <esc>gT
 
   " Comment lines with cmd+/
   map <D-/> :TComment<cr>
