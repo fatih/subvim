@@ -18,3 +18,8 @@ if has("gui_macvim")
   an 10.190 File.New\ File <nop>
   macmenu File.New\ File action=addNewTab: key=<D-n>
 endif
+
+let s:gc = $HOME."/.vim/custom/gvimrc"
+if filereadable(s:gc)
+    exec ":source ".s:gc
+endif
