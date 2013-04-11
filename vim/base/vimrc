@@ -112,6 +112,11 @@ if has("gui_macvim")
   imap <D-7> <esc>:tabfirst<Cr>7gt
   imap <D-8> <esc>:tabfirst<Cr>8gt
   imap <D-9> <esc>:tabfirst<Cr>9gt
+  " This mapping makes Ctrl-Tab switch between tabs. 
+  " Ctrl-Shift-Tab goes the other way.
+  noremap <C-Tab> :tabnext<CR>
+  noremap <C-S-Tab> :tabprev<CR>
+
 
   " Select text whit shift
   let macvim_hig_shift_movement = 1
