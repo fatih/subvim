@@ -28,8 +28,10 @@ SublimeText-like features with the same shortcuts without installing or compilin
 * `cmd + alt + right` -> Move to previous tab
 * `cmd + z` -> Undo
 * `cmd + shift + z` -> Redo
-* `cmd + s` -> Save file
-* `cmd + w` -> Close file
+* `cmd + n` -> New File
+* `cmd + shift + n` -> New Window
+* `cmd + s` -> Save File
+* `cmd + w` -> Close File
 * `cmd + f` -> Search and replace
 * `ctrl + tab` -> Cycle through tabs
 * `ctrl + shift + tab` -> Cycle through tabs (backwards)
