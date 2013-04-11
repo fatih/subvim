@@ -31,6 +31,8 @@ SublimeText-like features with the same shortcuts without installing or compilin
 * `cmd + s` -> Save file
 * `cmd + w` -> Close file
 * `cmd + f` -> Search and replace
+* `ctrl + tab` -> Cycle through tabs
+* `ctrl + shift + tab` -> Cycle through tabs (backwards)
 
 Some more awesome features:
 
