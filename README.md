@@ -134,6 +134,7 @@ Arslan!
 
 * Add Linux-compatible option
 * Autoload of vimrc settings (no need for restart anymore)
+* Integrate multi cursor ([vim-multiple-cursors](https://github.com/terryma/vim-multiple-cursors))
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
