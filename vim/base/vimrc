@@ -187,3 +187,5 @@ let g:delimitMate_expand_cr = 1
 let g:delimitMate_expand_space = 1
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
+
+au! bufwritepost $MYVIMRC so %
