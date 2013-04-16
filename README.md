@@ -19,6 +19,7 @@ SublimeText-like features with the same shortcuts without installing or compilin
 * `cmd + t` -> Goto File...
 * `cmd + r` -> Goto Symbol on  current file...
 * `cmd + shift + r` -> Goto Symbol on all files...
+* `cmd + d` -> Select words for multiple selection editing
 * `cmd + k` -> Show side bar 
 * `cmd + /` -> Toggle comment
 * `cmd + [` -> Indent 
@@ -39,6 +40,7 @@ SublimeText-like features with the same shortcuts without installing or compilin
 Some more awesome features:
 
 * SublimeText like colorscheme
+* Multiple Selections/Cursor feature. Use `cmd+d` for selecting words, `cmd+u` for undo, `cmd+k` for skipping words and `esc` to quit the multi cursor mode.
 * On the fly "Goto symbol, definition" feature.
 [41](http://ctags.sourceforge.net/languages.html) languages, including Go, Rust,
 Coffeescript, Objective-C and Markdown, are supported. No need to install external
@@ -58,9 +60,9 @@ these two options are supported. Just clone the repo and execute `make`:
     cd subvim
     make
     
-This will create symlinks from the `subvim` folder to `~/.vim`, `~/.vimrc`
-and `~/.ctags`. Thus you can put the `subvim` folder in your favorite
-place.
+This will create symlinks from the `subvim` folder to `~/.vim`, `~/.vimrc`,
+`~/.gvimrc` and `~/.ctags`. Thus you can put the `subvim` folder in your
+favorite place.
 
 And finally you can always update it easily with:
 
@@ -81,7 +83,8 @@ This will just remove the symlinks created previously:
 All custom settings are stored in the folder `vim/custom/`. You have to create
 it for the first time.
 
-* For *settings*, add your custom vimrc settings to the file `vim/custom/vimrc`. Create it for the first time. An example file might be:
+* For *settings*, add your custom vimrc settings to the file `vim/custom/vimrc`
+(or `vim/custom/gvimrc`). An example file might be:
 ```
 " ~/.vim/custom/vimrc ...my own custom settings
 let mapleader = ","
@@ -134,15 +137,16 @@ Arslan!
 
 * Add Linux-compatible option
 * Autoload of vimrc settings (no need for restart anymore)
-* Integrate multi cursor ([vim-multiple-cursors](https://github.com/terryma/vim-multiple-cursors))
 * Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
   [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
   should custoimize and add plugins theirself.
+* Create a dedicated page to usage and shortcuts
 
 ## Credits
 
-romainl, osse, rking, #vim on freenode
+* All vim plugins authors. An extended list with authors and plugins will be created.
+* romainl, osse, rking, etc.. on #vim - freenode
 
 ## License
 
