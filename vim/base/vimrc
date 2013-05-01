@@ -42,6 +42,7 @@ set hlsearch                    " Highlight found searches
 set ignorecase                  " Search case insensitive...
 set smartcase                   " ... but not when search pattern contains upper case characters
 
+set switchbuf=usetab,newtab     " open new buffers always in new tabs
 
 " ----------------------------------------------"
 " MacVim modifications (color, shortcuts, etc.. "
