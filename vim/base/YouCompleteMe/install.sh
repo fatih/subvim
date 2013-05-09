@@ -2,6 +2,10 @@
 
 set -e
 
+function command_exists {
+  hash "$1" 2>/dev/null ;
+}
+
 function cmake_install {
   if [[ `uname -s` == "Darwin" ]]; then
     homebrew_cmake_install
@@ -47,15 +51,20 @@ function python_finder {
 }
 
 function num_cores {
-  num_cpus=1
-  if [[ `uname -s` == "Linux" ]]; then
-    num_cpus=$(grep -c ^processor /proc/cpuinfo)
+  if command_exists nproc; then
+   num_cpus=$(nproc)
   else
-    # Works on Mac and FreeBSD
-    num_cpus=$(sysctl -n hw.ncpu)
+    num_cpus=1
+    if [[ `uname -s` == "Linux" ]]; then
+      num_cpus=$(grep -c ^processor /proc/cpuinfo)
+    else
+      # Works on Mac and FreeBSD
+      num_cpus=$(sysctl -n hw.ncpu)
+    fi
   fi
   echo $num_cpus
 }
+
 
 function install {
   ycm_dir=`pwd`
@@ -63,12 +72,26 @@ function install {
   pushd $build_dir
 
   if [[ `uname -s` == "Darwin" ]]; then
-    cmake -G "Unix Makefiles" $(python_finder) $1 . $ycm_dir/cpp
+    cmake -G "Unix Makefiles" $(python_finder) "$@" . $ycm_dir/cpp
   else
-    cmake -G "Unix Makefiles" $1 . $ycm_dir/cpp
+    cmake -G "Unix Makefiles" "$@" . $ycm_dir/cpp
   fi
 
   make -j $(num_cores) ycm_core
+  popd
+  rm -rf $build_dir
+}
+
+function testrun {
+  ycm_dir=`pwd`
+  build_dir=`mktemp -d -t ycm_build.XXXXXX`
+  pushd $build_dir
+
+  cmake -G "Unix Makefiles" "$@" . $ycm_dir/cpp
+  make -j $(num_cores) ycm_core_tests
+  cd ycm/tests
+  LD_LIBRARY_PATH=$ycm_dir/python ./ycm_core_tests
+
   popd
   rm -rf $build_dir
 }
@@ -99,8 +122,14 @@ case "$1" in
     ;;
 esac
 
-if [[ ! -z `which cmake &> /dev/null` ]]; then
+if ! command_exists cmake; then
   echo "CMake is required to build YouCompleteMe."
   cmake_install
 fi
-install $cmake_args
+
+if [ -z "$YCM_TESTRUN" ]; then
+  install $cmake_args $EXTRA_CMAKE_ARGS
+else
+  testrun $cmake_args $EXTRA_CMAKE_ARGS
+fi
+

@@ -47,6 +47,7 @@ Coffeescript, Objective-C and Markdown, are supported. No need to install extern
 plugins or binaries.
 * Full featured autocompletion via YCM. No need to compile the YCM plugin,
 subvim has already pre-compiled binaries included.
+* Snippet system with over 40 languages and configurable
 * Restore latest state (tab, files) when quitting and restarting again.
 * Automatic closing of quotes, parenthesis, brackets and etc..
 * ... many other fixes and improvements.
@@ -137,8 +138,6 @@ Arslan!
 
 * Add Linux-compatible option
 * Autoload of vimrc settings (no need for restart anymore)
-* Integrate snippet system ([SnipMate](https://github.com/garbas/vim-snipmate),
-  [UltiSnip](https://github.com/SirVer/ultisnips)). Need this: https://github.com/Valloric/YouCompleteMe/issues/36
 * Make it always as simple as possible without breaking any plugins. Users
   should custoimize and add plugins theirself.
 * Create a dedicated page to usage and shortcuts

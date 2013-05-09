@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2011, 2012  Stephen Sugden <me@stephensugden.com>
 #                           Strahinja Val Markovic <val@markovic.io>
+#                           Stanislav Golovanov <stgolovanov@gmail.com>
 #
 # This file is part of YouCompleteMe.
 #
@@ -19,8 +20,7 @@
 # along with YouCompleteMe.  If not, see <http://www.gnu.org/licenses/>.
 
 import vim
-from threading import Thread, Event
-from completers.completer import Completer
+from completers.threaded_completer import ThreadedCompleter
 import vimsupport
 
 import sys
@@ -31,15 +31,22 @@ from os.path import join, abspath, dirname
 # removes sys.path[0] after importing completers.python.hook
 sys.path.insert( 0, join( abspath( dirname( __file__ ) ), 'jedi' ) )
 try:
-  from jedi import Script
+  import jedi
 except ImportError:
   vimsupport.PostVimMessage(
     'Error importing jedi. Make sure the jedi submodule has been checked out. '
     'In the YouCompleteMe folder, run "git submodule update --init --recursive"')
 sys.path.pop( 0 )
 
+USER_COMMANDS_HELP_MESSAGE = """
+Supported commands are:
+  GoToDefinition
+  GoToDeclaration
+  GoToDefinitionElseDeclaration
+See the docs for information on what they do."""
 
-class JediCompleter( Completer ):
+
+class JediCompleter( ThreadedCompleter ):
   """
   A Completer that uses the Jedi completion engine.
   https://jedi.readthedocs.org/en/latest/
@@ -47,16 +54,6 @@ class JediCompleter( Completer ):
 
   def __init__( self ):
     super( JediCompleter, self ).__init__()
-    self._query_ready = Event()
-    self._candidates_ready = Event()
-    self._candidates = None
-    self._start_completion_thread()
-
-
-  def _start_completion_thread( self ):
-    self._completion_thread = Thread( target=self.SetCandidates )
-    self._completion_thread.daemon = True
-    self._completion_thread.start()
 
 
   def SupportedFiletypes( self ):
@@ -64,48 +61,107 @@ class JediCompleter( Completer ):
     return [ 'python' ]
 
 
-  def CandidatesForQueryAsyncInner( self, unused_query ):
-    self._candidates = None
-    self._candidates_ready.clear()
-    self._query_ready.set()
+  def _GetJediScript( self ):
+      contents = '\n'.join( vim.current.buffer )
+      line, column = vimsupport.CurrentLineAndColumn()
+      # Jedi expects lines to start at 1, not 0
+      line += 1
+      filename = vim.current.buffer.name
+
+      return jedi.Script( contents, line, column, filename )
 
 
-  def AsyncCandidateRequestReadyInner( self ):
-    if self._completion_thread.is_alive():
-      return WaitAndClear( self._candidates_ready, timeout=0.005 )
+  def ComputeCandidates( self, unused_query, unused_start_column ):
+    script = self._GetJediScript()
+
+    return [ { 'word': str( completion.word ),
+               'menu': str( completion.description ),
+               'info': str( completion.doc ) }
+             for completion in script.complete() ]
+
+
+  def OnUserCommand( self, arguments ):
+    if not arguments:
+      vimsupport.EchoText( USER_COMMANDS_HELP_MESSAGE )
+      return
+
+    command = arguments[ 0 ]
+    if command == 'GoToDefinition':
+      self._GoToDefinition()
+    elif command == 'GoToDeclaration':
+      self._GoToDeclaration()
+    elif command == 'GoToDefinitionElseDeclaration':
+      self._GoToDefinitionElseDeclaration()
+
+
+  def _GoToDefinition( self ):
+    definitions = self._GetDefinitionsList()
+    if definitions:
+      self._JumpToLocation( definitions )
     else:
-      self._start_completion_thread()
-      return False
+      vimsupport.PostVimMessage( 'Can\'t jump to definition.' )
 
 
-  def CandidatesFromStoredRequestInner( self ):
-    return self._candidates or []
+  def _GoToDeclaration( self ):
+    definitions = self._GetDefinitionsList( declaration = True )
+    if definitions:
+      self._JumpToLocation( definitions )
+    else:
+      vimsupport.PostVimMessage( 'Can\'t jump to declaration.' )
 
 
-  def SetCandidates( self ):
-    while True:
-      try:
-        WaitAndClear( self._query_ready )
-
-        filename = vim.current.buffer.name
-        line, column = vimsupport.CurrentLineAndColumn()
-        # Jedi expects lines to start at 1, not 0
-        line += 1
-        contents = '\n'.join( vim.current.buffer )
-        script = Script( contents, line, column, filename )
-
-        self._candidates = [ { 'word': str( completion.word ),
-                               'menu': str( completion.description ),
-                               'info': str( completion.doc ) }
-                            for completion in script.complete() ]
-      except:
-        self._query_ready.clear()
-        self._candidates = []
-      self._candidates_ready.set()
+  def _GoToDefinitionElseDeclaration( self ):
+    definitions = self._GetDefinitionsList() or \
+        self._GetDefinitionsList( declaration = True )
+    if definitions:
+      self._JumpToLocation( definitions )
+    else:
+      vimsupport.PostVimMessage( 'Can\'t jump to definition or declaration.' )
 
 
-def WaitAndClear( event, timeout=None ):
-    flag_is_set = event.wait( timeout )
-    if flag_is_set:
-        event.clear()
-    return flag_is_set
+  def _GetDefinitionsList( self, declaration = False ):
+    definitions = []
+    script = self._GetJediScript()
+    try:
+      if declaration:
+        definitions = script.get_definition()
+      else:
+        definitions = script.goto()
+    except jedi.NotFoundError:
+      vimsupport.PostVimMessage(
+                  "Cannot follow nothing. Put your cursor on a valid name." )
+    except Exception as e:
+      vimsupport.PostVimMessage(
+                  "Caught exception, aborting. Full error: " + str( e ) )
+
+    return definitions
+
+
+  def _JumpToLocation( self, definition_list ):
+    if len( definition_list ) == 1:
+      definition = definition_list[ 0 ]
+      if definition.in_builtin_module():
+        if isinstance( definition.definition, jedi.keywords.Keyword ):
+          vimsupport.PostVimMessage(
+                  "Cannot get the definition of Python keywords." )
+        else:
+          vimsupport.PostVimMessage( "Builtin modules cannot be displayed." )
+      else:
+        vimsupport.JumpToLocation( definition.module_path,
+                                   definition.line_nr,
+                                   definition.column + 1 )
+    else:
+      # multiple definitions
+      defs = []
+      for definition in definition_list:
+        if definition.in_builtin_module():
+          defs.append( {'text': 'Builtin ' + \
+                       definition.description.encode( 'utf-8' ) } )
+        else:
+          defs.append( {'filename': definition.module_path.encode( 'utf-8' ),
+                        'lnum': definition.line_nr,
+                        'col': definition.column + 1,
+                        'text': definition.description.encode( 'utf-8' ) } )
+
+      vim.eval( 'setqflist( %s )' % repr( defs ) )
+      vim.eval( 'youcompleteme#OpenGoToList()' )

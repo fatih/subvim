@@ -23,3 +23,4 @@ def IsIdentifierChar( char ):
 
 def SanitizeQuery( query ):
   return query.strip()
+

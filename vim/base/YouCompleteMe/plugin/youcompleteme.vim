@@ -45,7 +45,10 @@ function! s:HasYcmCore()
   return 0
 endfunction
 
-if !s:HasYcmCore()
+let g:ycm_check_if_ycm_core_present =
+      \ get( g:, 'ycm_check_if_ycm_core_present', 1 )
+
+if g:ycm_check_if_ycm_core_present && !s:HasYcmCore()
   echohl WarningMsg |
         \ echomsg "ycm_core.[so|pyd] not detected; you need to compile YCM " .
         \ "before using it. Read the docs!" |
@@ -85,8 +88,11 @@ let g:ycm_allow_changing_updatetime =
 let g:ycm_add_preview_to_completeopt =
       \ get( g:, 'ycm_add_preview_to_completeopt', 0 )
 
-let g:ycm_complete_in_comments_and_strings =
-      \ get( g:, 'ycm_complete_in_comments_and_strings', 0 )
+let g:ycm_complete_in_comments =
+      \ get( g:, 'ycm_complete_in_comments', 0 )
+
+let g:ycm_complete_in_strings =
+      \ get( g:, 'ycm_complete_in_strings', 1 )
 
 let g:ycm_collect_identifiers_from_comments_and_strings =
       \ get( g:, 'ycm_collect_identifiers_from_comments_and_strings', 0 )
@@ -121,10 +127,14 @@ let g:ycm_confirm_extra_conf =
 let g:ycm_extra_conf_globlist =
       \ get( g:, 'ycm_extra_conf_globlist', [] )
 
+let g:ycm_filepath_completion_use_working_dir =
+      \ get( g:, 'ycm_filepath_completion_use_working_dir', 0 )
+
 let g:ycm_semantic_triggers =
       \ get( g:, 'ycm_semantic_triggers', {
       \   'c' : ['->', '.'],
       \   'objc' : ['->', '.'],
+      \   'ocaml' : ['.', '#'],
       \   'cpp,objcpp' : ['->', '.', '::'],
       \   'perl' : ['->'],
       \   'php' : ['->', '::'],
@@ -132,6 +142,9 @@ let g:ycm_semantic_triggers =
       \   'lua' : ['.', ':'],
       \   'erlang' : [':'],
       \ } )
+
+let g:ycm_cache_omnifunc =
+      \ get( g:, 'ycm_cache_omnifunc', 1 )
 
 " On-demand loading. Let's use the autoload folder and not slow down vim's
 " startup procedure.

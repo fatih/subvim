@@ -36,13 +36,29 @@ class OmniCompleter( Completer ):
     return []
 
 
+  def ShouldUseCache( self ):
+    return vimsupport.GetBoolValue( "g:ycm_cache_omnifunc" )
+
+
+  def ShouldUseNow( self, start_column ):
+    if self.ShouldUseCache():
+      return super( OmniCompleter, self ).ShouldUseNow( start_column )
+    return self.ShouldUseNowInner( start_column )
+
   def ShouldUseNowInner( self, start_column ):
     if not self.omnifunc:
       return False
     return super( OmniCompleter, self ).ShouldUseNowInner( start_column )
 
 
-  def CandidatesForQueryAsyncInner( self, query ):
+  def CandidatesForQueryAsync( self, query, unused_start_column ):
+    if self.ShouldUseCache():
+      return super( OmniCompleter, self ).CandidatesForQueryAsync(
+          query, unused_start_column )
+    else:
+      return self.CandidatesForQueryAsyncInner( query, unused_start_column )
+
+  def CandidatesForQueryAsyncInner( self, query, unused_start_column ):
     if not self.omnifunc:
       self.stored_candidates = None
       return
@@ -59,8 +75,9 @@ class OmniCompleter( Completer ):
                         "')" ]
 
       items = vim.eval( ''.join( omnifunc_call ) )
-      if hasattr( items, 'words' ):
-        items = items.words
+
+      if 'words' in items:
+        items = items['words']
       if not hasattr( items, '__iter__' ):
         raise TypeError( OMNIFUNC_NOT_LIST )
 
@@ -80,6 +97,12 @@ class OmniCompleter( Completer ):
   def OnFileReadyToParse( self ):
     self.omnifunc = vim.eval( '&omnifunc' )
 
+
+  def CandidatesFromStoredRequest( self ):
+    if self.ShouldUseCache():
+      return super( OmniCompleter, self ).CandidatesFromStoredRequest()
+    else:
+      return self.CandidatesFromStoredRequestInner()
 
   def CandidatesFromStoredRequestInner( self ):
     return self.stored_candidates if self.stored_candidates else []

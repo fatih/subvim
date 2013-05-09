@@ -1,5 +1,6 @@
 " .vimrc
 set nocompatible                "Turn off compability mode with Vi, we don't need that anymore
+filetype off " required
 
 execute pathogen#infect('base/{}')
 if isdirectory(expand("$HOME/.vim/custom/"))
@@ -140,8 +141,12 @@ let g:ctrlp_max_height = 10				" maxiumum height of match window
 let g:ctrlp_switch_buffer = 'et'		" jump to a file if it's open already
 let g:ctrlp_use_caching = 1				" enable caching
 let g:ctrlp_clear_cache_on_exit=0  		" speed up by not removing clearing cache evertime
-let g:ctrlp_show_hidden = 1				" show me dotfiles
 let g:ctrlp_mruf_max = 250 				" number of recently opened files
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn|build)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+  \ }
 
 func! MyPrtMappings()
     let g:ctrlp_prompt_mappings = {
@@ -178,6 +183,7 @@ let g:ctrlp_buftag_types = {
 let g:Powerline_symbols = 'fancy'
 
 let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_complete_in_comments_and_strings = 1
 
 let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
@@ -195,3 +201,23 @@ let g:multi_cursor_prev_key = '<D-u>'
 let g:multi_cursor_skip_key = '<D-k>' "until we got multiple keys support
 let g:multi_cursor_quit_key = '<Esc>'
 
+function! g:UltiSnips_Complete()
+    call UltiSnips_ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips_JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
+endfunction
+
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
+let g:UltiSnipsSnippetDirectories = ["UltiSnips", "ultisnips-snippets"]

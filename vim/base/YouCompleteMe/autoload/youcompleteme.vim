@@ -40,6 +40,8 @@ function! youcompleteme#Enable()
   py import sys
   py import vim
   exe 'python sys.path.insert( 0, "' . s:script_folder_path . '/../python" )'
+  py import extra_conf_store
+  py extra_conf_store.CallExtraConfYcmCorePreloadIfExists()
   py import ycm
 
   if !pyeval( 'ycm.CompatibleWithYcmCore()')
@@ -65,10 +67,13 @@ function! youcompleteme#Enable()
     autocmd CursorHold,CursorHoldI * call s:OnCursorHold()
     autocmd InsertLeave * call s:OnInsertLeave()
     autocmd InsertEnter * call s:OnInsertEnter()
+    autocmd VimLeave * call s:OnVimLeave()
   augroup END
 
+  call s:SetUpCpoptions()
   call s:SetUpCompleteopt()
   call s:SetUpKeyMappings()
+  call s:SetUpBackwardsCompatibility()
 
   if g:ycm_register_as_syntastic_checker
     call s:ForceSyntasticCFamilyChecker()
@@ -118,15 +123,32 @@ function! s:SetUpKeyMappings()
   endfor
 
   if !empty( g:ycm_key_invoke_completion )
+    let invoke_key = g:ycm_key_invoke_completion
+
+    " Inside the console, <C-Space> is passed as <Nul> to Vim
+    if invoke_key ==# '<C-Space>' && !has('gui_running')
+      let invoke_key = '<Nul>'
+    endif
+
     " <c-x><c-o> trigger omni completion, <c-p> deselects the first completion
     " candidate that vim selects by default
-    silent! exe 'inoremap <unique> ' . g:ycm_key_invoke_completion .
-          \ ' <C-X><C-O><C-P>'
+    silent! exe 'inoremap <unique> ' . invoke_key .  ' <C-X><C-O><C-P>'
   endif
 
   if !empty( g:ycm_key_detailed_diagnostics )
     silent! exe 'nnoremap <unique> ' . g:ycm_key_detailed_diagnostics .
           \ ' :YcmShowDetailedDiagnostic<cr>'
+  endif
+endfunction
+
+
+function! s:SetUpBackwardsCompatibility()
+  let complete_in_comments_and_strings =
+        \ get( g:, 'ycm_complete_in_comments_and_strings', 0 )
+
+  if complete_in_comments_and_strings
+    let g:ycm_complete_in_strings = 1
+    let g:ycm_complete_in_comments = 1
   endif
 endfunction
 
@@ -153,6 +175,13 @@ function! s:AllowedToCompleteInCurrentFile()
 endfunction
 
 
+function! s:SetUpCpoptions()
+  " Without this flag in cpoptions, critical YCM mappings do not work. There's
+  " no way to not have this and have YCM working, so force the flag.
+  set cpoptions+=B
+endfunction
+
+
 function! s:SetUpCompleteopt()
   " Some plugins (I'm looking at you, vim-notes) change completeopt by for
   " instance adding 'longest'. This breaks YCM. So we force our settings.
@@ -176,6 +205,10 @@ function! s:SetUpCompleteopt()
   endif
 endfunction
 
+function! s:OnVimLeave()
+  py extra_conf_store.CallExtraConfVimCloseIfExists()
+endfunction
+
 
 function! s:OnBufferVisit()
   if !s:AllowedToCompleteInCurrentFile()
@@ -184,6 +217,7 @@ function! s:OnBufferVisit()
 
   call s:SetUpCompleteopt()
   call s:SetCompleteFunc()
+  py ycm_state.OnBufferVisit()
   call s:OnFileReadyToParse()
 endfunction
 
@@ -360,18 +394,35 @@ function! s:IdentifierFinishedOperations()
 endfunction
 
 
+" Returns 1 when inside comment and 2 when inside string
 function! s:InsideCommentOrString()
-  if g:ycm_complete_in_comments_and_strings
-    return 0
-  endif
-
   " Has to be col('.') -1 because col('.') doesn't exist at this point. We are
   " in insert mode when this func is called.
   let syntax_group = synIDattr( synIDtrans( synID( line( '.' ), col( '.' ) - 1, 1 ) ), 'name')
-  if stridx(syntax_group, 'Comment') > -1 || stridx(syntax_group, 'String') > -1
+
+  if stridx(syntax_group, 'Comment') > -1
     return 1
   endif
+
+  if stridx(syntax_group, 'String') > -1
+    return 2
+  endif
+
   return 0
+endfunction
+
+
+function! s:InsideCommentOrStringAndShouldStop()
+  let retval = s:InsideCommentOrString()
+  let inside_comment = retval == 1
+  let inside_string = retval == 2
+
+  if inside_comment && g:ycm_complete_in_comments ||
+        \ inside_string && g:ycm_complete_in_strings
+    return 0
+  endif
+
+  return retval
 endfunction
 
 
@@ -385,7 +436,7 @@ function! s:InvokeCompletion()
     return
   endif
 
-  if s:InsideCommentOrString() || s:OnBlankLine()
+  if s:InsideCommentOrStringAndShouldStop() || s:OnBlankLine()
     return
   endif
 
@@ -412,15 +463,16 @@ function! s:InvokeCompletion()
 endfunction
 
 
-function! s:CompletionsForQuery( query, use_filetype_completer )
+function! s:CompletionsForQuery( query, use_filetype_completer,
+      \ completion_start_column )
   if a:use_filetype_completer
     py completer = ycm_state.GetFiletypeCompleter()
   else
-    py completer = ycm_state.GetIdentifierCompleter()
+    py completer = ycm_state.GetGeneralCompleter()
   endif
 
-  " TODO: don't trigger on a dot inside a string constant
-  py completer.CandidatesForQueryAsync( vim.eval( 'a:query' ) )
+  py completer.CandidatesForQueryAsync( vim.eval( 'a:query' ),
+        \ int( vim.eval( 'a:completion_start_column' ) ) )
 
   let l:results_ready = 0
   while !l:results_ready
@@ -465,7 +517,7 @@ function! youcompleteme#Complete( findstart, base )
           \ s:completion_start_column . ')' )
 
     if !s:should_use_filetype_completion &&
-          \ !pyeval( 'ycm_state.ShouldUseIdentifierCompleter(' .
+          \ !pyeval( 'ycm_state.ShouldUseGeneralCompleter(' .
           \ s:completion_start_column . ')' )
       " for vim, -2 means not found but don't trigger an error message
       " see :h complete-functions
@@ -473,7 +525,8 @@ function! youcompleteme#Complete( findstart, base )
     endif
     return s:completion_start_column
   else
-    return s:CompletionsForQuery( a:base, s:should_use_filetype_completion )
+    return s:CompletionsForQuery( a:base, s:should_use_filetype_completion,
+          \ s:completion_start_column )
   endif
 endfunction
 
@@ -484,7 +537,7 @@ function! youcompleteme#OmniComplete( findstart, base )
     let s:completion_start_column = pyeval( 'ycm.CompletionStartColumn()' )
     return s:completion_start_column
   else
-    return s:CompletionsForQuery( a:base, 1 )
+    return s:CompletionsForQuery( a:base, 1, s:completion_start_column )
   endif
 endfunction
 
@@ -528,7 +581,7 @@ function! s:CompleterCommand(...)
     if a:1 == 'ft=ycm:omni'
       py completer = ycm_state.GetOmniCompleter()
     elseif a:1 == 'ft=ycm:ident'
-      py completer = ycm_state.GetIdentifierCompleter()
+      py completer = ycm_state.GetGeneralCompleter()
     else
       py completer = ycm_state.GetFiletypeCompleterForFiletype(
                    \ vim.eval('a:1').lstrip('ft=') )
@@ -545,6 +598,15 @@ function! s:CompleterCommand(...)
   endif
 
   py completer.OnUserCommand( vim.eval( 'l:arguments' ) )
+endfunction
+
+function! youcompleteme#OpenGoToList()
+  set lazyredraw
+  cclose
+  execute 'belowright copen 3'
+  set nolazyredraw
+  au WinLeave <buffer> q  " automatically leave, if an option is chosen
+  redraw!
 endfunction
 
 command! -nargs=* YcmCompleter call s:CompleterCommand(<f-args>)

@@ -41,11 +41,19 @@ endif()
 
 if ( CMAKE_CXX_COMPILER_ID STREQUAL "Clang" )
   set( COMPILER_IS_CLANG true )
-  set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++" )
+
+  # The Travis CI build machines don't have libc++ installed
+  if ( NOT DEFINED ENV{TRAVIS} )
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++" )
+  endif()
 endif()
 
 if ( CMAKE_GENERATOR STREQUAL Xcode )
   set( CMAKE_GENERATOR_IS_XCODE true )
+endif()
+
+if ( ${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD" )
+  set( SYSTEM_IS_FREEBSD true )
 endif()
 
 # Force release build by default, speed is of the essence
