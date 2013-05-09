@@ -50,6 +50,32 @@ if ${1:condition}${1/(.+)/ /}{
 }
 endsnippet
 
+snippet fn "fmt println" !b
+fmt.Println("${1:${VISUAL}}")${2}
+endsnippet
+
+snippet ff "fmt printf" !b
+fmt.Printf("${1:${VISUAL}}", ${2})${3}
+endsnippet
+
+snippet ln "log println" !b
+log.Println("${1:${VISUAL}}")${2}
+endsnippet
+
+snippet lf "log printf" !b
+log.Printf("${1:${VISUAL}}", ${2})${3}
+endsnippet
+
+snippet lf "log printf" !b
+log.Printf("${1:${VISUAL}}", ${2})${3}
+endsnippet
+
+snippet type "Type struct" !b
+type ${1:name} struct {
+    ${2}
+}
+endsnippet
+
 snippet switch "Switch statement" !b
 switch ${1:expression}${1/(.+)/ /}{
 case${0}
@@ -87,7 +113,7 @@ endsnippet
 
 # types and variables
 snippet map "Map type" !b
-map[${1:keytype}]${2:valtype}
+map[${1:key}]${2:value}
 endsnippet
 
 snippet : "Variable declaration :=" !b
