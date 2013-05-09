@@ -183,7 +183,6 @@ let g:ctrlp_buftag_types = {
 let g:Powerline_symbols = 'fancy'
 
 let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_complete_in_comments_and_strings = 1
 
 let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
@@ -217,7 +216,6 @@ function! g:UltiSnips_Complete()
 endfunction
 
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsSnippetDirectories = ["UltiSnips", "ultisnips-snippets"]
