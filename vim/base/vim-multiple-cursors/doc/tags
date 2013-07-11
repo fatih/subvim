@@ -5,6 +5,7 @@ g:multi_cursor_next_key	multiple_cursors.txt	/*g:multi_cursor_next_key*
 g:multi_cursor_prev_key	multiple_cursors.txt	/*g:multi_cursor_prev_key*
 g:multi_cursor_quit_key	multiple_cursors.txt	/*g:multi_cursor_quit_key*
 g:multi_cursor_skip_key	multiple_cursors.txt	/*g:multi_cursor_skip_key*
+g:multi_cursor_start_key	multiple_cursors.txt	/*g:multi_cursor_start_key*
 g:multi_cursor_use_default_mapping	multiple_cursors.txt	/*g:multi_cursor_use_default_mapping*
 multiple-cursors-contents	multiple_cursors.txt	/*multiple-cursors-contents*
 multiple-cursors-contributing	multiple_cursors.txt	/*multiple-cursors-contributing*

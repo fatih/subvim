@@ -66,9 +66,9 @@ You can also add multiple cursors using a regular expression. The command
 virtual cursor at the end of every match within the range. If no range is
 passed in, then it defaults to the entire buffer.
 
-NOTE: The plugin is still somewhat buggy, if at any time you have
-lingering cursors on screen, you can press CTRL-N in Normal mode and it will
-remove all prior cursors before starting a new one.
+NOTE: If at any time you have lingering cursors on screen, you can press
+CTRL-N in Normal mode and it will remove all prior cursors before starting a
+new one.
 
 ==============================================================================
 3. Mappings                                        *multiple-cursors-mappings* 
@@ -97,6 +97,15 @@ following: >
     let g:multi_cursor_prev_key='<C-p>'
     let g:multi_cursor_skip_key='<C-x>'
     let g:multi_cursor_quit_key='<Esc>'
+<
+
+*g:multi_cursor_start_key* (Default: 'g:multi_cursor_next_key')
+By default, the same key is used to enter multicursor mode as to select the
+next cursor location.  If you want to use a different key to start multicursor
+mode than for selecting the next location, do like the following: >
+
+    " Map start key separately from next key
+    let g:multi_cursor_start_key='<F6>'
 <
 
 IMPORTANT: Please note that currently only single keystroes and special
@@ -151,13 +160,7 @@ like the following in your vimrc: >
   cursors is lost. This is a implementation decision to keep the input
   perfectly synced in all locations, at the cost of potentially losing user
   input.
-- Single key commands that do not terminate properly cause unexpected
-  behavior. For example, if the cursor is on the first character in the buffer
-  and 'b' is pressed.
-- Undo behavior is unpredictable
-- Performance in terminal vim degrades significantly with more cursors
 - Select mode is not implemented
-- Buggy when wrap is turned on
 
 ==============================================================================
 6. Contributing                                *multiple-cursors-contributing* 

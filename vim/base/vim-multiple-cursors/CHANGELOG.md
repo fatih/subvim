@@ -1,3 +1,42 @@
+## 2.2 (06/10/2013)
+Bugfixes:
+  - Fix plugin break in PASTE mode. This fixes #44.
+
+## 2.1 (04/26/2013)
+
+Bugfixes:
+  - Fix 1 regression where cursors could potentially get out of sync in insert mode
+
+Features:
+  - Added some logic to debug latency. Fanning out to 30 cursors in insert mode with my vimrc took over 300ms. It's like than 20ms with a plain vimrc. Need to debug what setting is causing the slowing down in insert mode and inform users.
+
+## 2.0 (04/24/2013)
+
+Bugfixes:
+  - Fix inconsistent undo behavior. Changes made in multicursor insert mode are now undone together. This fixes #22.
+  - Single key commands that do not terminate properly no longer cause ghostly cursors to linger on screen. An error message is now displayed informing the user the number of cursor locations that the input cannot be properly played back at. This fixes #28.
+
+## 1.16 (04/23/2013)
+
+Features:
+  - Add integration tests using vimrunner. Hook up travis-ci to run continous integration on commit.
+
+## 1.15 (04/22/2013)
+
+Bugfixes:
+  - Fix plugin causing error bell. This fixes #29.
+
+## 1.14 (04/22/2013)
+
+Features:
+  - Allow users to separate start key from next key. (credit: @xanderman)
+
+## 1.13 (04/22/2013)
+
+Bugfixes:
+  - Add support for switching to visual line mode from inside multicursor mode
+  - Fix highlight issue where extra character at end of line is highlighted for visual selections covering more than 2 lines.
+
 ## 1.12 (04/19/2013)
 
 Bugfixes:
@@ -22,7 +61,7 @@ Features:
 
 Bugfixes:
   - Fix starting multicursor mode in visual line mode. This fixes #25
-  - Major refactoring get avoid getting in and out of visual mode as much as possible
+  - Major refactoring to avoid getting in and out of visual mode as much as possible
 
 ## 1.8 (04/16/2013)
 
