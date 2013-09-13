@@ -56,7 +56,7 @@ highlight SignColumn guibg=#272822
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
-  set guifont=Source\ Code\ Pro\ for\ Powerline:h13 "TODO: include these fonts by default
+  set guifont=Source\ Code\ Pro\ for\ Powerline:h12 "TODO: include these fonts by default
   set clipboard+=unnamed
   set vb t_vb=
   set guioptions-=m  "no menu
@@ -137,6 +137,7 @@ endif
 let g:ctrlp_cmd = 'CtrlPMixed'			" search anything (in files, buffers and MRU files at the same time.)
 let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
 let g:ctrlp_match_window_bottom = 0		" show the match window at the top of the screen
+let g:ctrlp_by_filename = 1
 let g:ctrlp_max_height = 10				" maxiumum height of match window
 let g:ctrlp_switch_buffer = 'et'		" jump to a file if it's open already
 let g:ctrlp_use_caching = 1				" enable caching
@@ -179,10 +180,10 @@ let g:ctrlp_buftag_types = {
 \ 'rc'         : '--language-force=rust --rust-types=fTm'
 \ }
 
-
 let g:Powerline_symbols = 'fancy'
 
 let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_min_num_of_chars_for_completion = 1
 
 let g:session_autosave = 'yes'
 let g:session_autoload = 'yes'
