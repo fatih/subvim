@@ -112,7 +112,7 @@ explained above. There is no binary compiling or installing extra stuff. All
 these are integrated.
 
 subvim has some very nice shortcuts that gives you the same
-experience as using SublimeText. These shortcuts do no interfere with any
+experience as using SublimeText. These shortcuts do not interfere with any
 default vim shortcuts. It's aimed for a full Mac OS X experience. I'm
 thinking about making subvim Linux compatible (gvim) in the future.
 
