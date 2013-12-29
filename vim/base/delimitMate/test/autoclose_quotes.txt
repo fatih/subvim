@@ -4,6 +4,7 @@ let g:delimitMate_autoclose = 1
 "''x" "''x"
 "'\<BS>x" "x"
 "'\<C-G>gx" "''x"
+# This will fail for double quote.
 "'\"x" "'\"x\"'"
 "@'x" "@'x'"
 "@#\<Left>'x" "@'x'#"
@@ -21,6 +22,8 @@ let g:delimitMate_autoclose = 0
 "@#\<Left>''x" "@'x'#"
 let g:delimitMate_expand_space = 1
 let g:delimitMate_autoclose = 1
+"'\<Space>x" "' x'"
+let g:delimitMate_expand_inside_quotes = 1
 "'\<Space>x" "' x '"
 "'\<Space>\<BS>x" "'x'"
 "abc\\''\<Space>x" "abc\\' x'"
@@ -30,9 +33,24 @@ let g:delimitMate_autoclose = 1
 # Handle backspace gracefully.
 set backspace=
 "'\<Esc>a\<BS>x" "'x'"
+set backspace=2
 set cpo=ces$
 "'x" "'x'"
 # Make sure smart quote works beyond first column.
 " 'x" " 'x'"
 # Make sure we jump over a quote on the right. #89.
 "('test'x" "('test'x)"
+# Duplicate whole line when inserting quote at bol #105
+"}\<Home>'" "''}"
+"'\<Del>abc  '" "'abc  '"
+"''abc '" "''abc ''"
+# Nesting quotes:
+let g:delimitMate_nesting_quotes = split(g:delimitMate_quotes, '\s\+')
+"'''x" "'''x'''"
+"''''x" "''''x''''"
+"''x" "''x"
+"'x" "'x'"
+unlet g:delimitMate_nesting_quotes
+# expand iabbreviations
+iabb def ghi
+"def'" "ghi'"
