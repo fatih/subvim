@@ -1,6 +1,6 @@
 " Vim script
 " Author: Peter Odding
-" Last Change: December 11, 2011
+" Last Change: July 4, 2013
 " URL: http://peterodding.com/code/vim/session/
 
 " Support for automatic update using the GLVS plug-in.
@@ -11,8 +11,37 @@ if &cp || exists('g:loaded_session')
   finish
 endif
 
-let s:save_cpo = &cpo
-set cpo&vim
+" Make sure vim-misc is installed. {{{1
+
+try
+  " The point of this code is to do something completely innocent while making
+  " sure the vim-misc plug-in is installed. We specifically don't use Vim's
+  " exists() function because it doesn't load auto-load scripts that haven't
+  " already been loaded yet (last tested on Vim 7.3).
+  call type(g:xolox#misc#version)
+catch
+  echomsg "Warning: The vim-session plug-in requires the vim-misc plug-in which seems not to be installed! For more information please review the installation instructions in the readme (also available on the homepage and on GitHub). The vim-session plug-in will now be disabled."
+  let g:loaded_session = 1
+  finish
+endtry
+
+" Configuration defaults. {{{1
+
+" The name of the default session (without directory or filename extension).
+if !exists('g:session_default_name')
+  let g:session_default_name = 'default'
+endif
+
+" If you set this to 1 (true), every Vim instance without an explicit session
+" loaded will overwrite the default session (the last Vim instance wins).
+if !exists('g:session_default_overwrite')
+  let g:session_default_overwrite = 0
+endif
+
+" The file extension of session scripts.
+if !exists('g:session_extension')
+  let g:session_extension = '.vim'
+endif
 
 " When you start Vim without opening any files the plug-in will prompt you
 " whether you want to load the default session. Other supported values for
@@ -30,9 +59,21 @@ if !exists('g:session_autosave')
   let g:session_autosave = 'prompt'
 endif
 
+" Periodically save the active session automatically? Set this to the
+" auto-save interval in minutes. The value zero disables the feature
+" (this is the default).
+if !exists('g:session_autosave_periodic')
+  let g:session_autosave_periodic = 0
+endif
+
+" Define the verbosity of messages.
+if !exists('g:session_verbose_messages')
+  let g:session_verbose_messages = 1
+endif
+
 " The session plug-in can automatically open sessions in three ways: based on
 " Vim's server name, by remembering the last used session or by opening the
-" session named `default'. Enable this option to use the second approach.
+" default session. Enable this option to use the second approach.
 if !exists('g:session_default_to_last')
   let g:session_default_to_last = 0
 endif
@@ -63,12 +104,13 @@ if !exists('g:session_command_aliases')
   let g:session_command_aliases = 0
 endif
 
-" Define the verbosity of messages.
-if !exists('g:session_verbose_messages')
-  let g:session_verbose_messages = 1
+" Allow to turn off the menu.
+if !exists('g:session_menu')
+  let g:session_menu = 1
 endif
 
-" Make sure the session scripts directory exists and is writable.
+" Make sure the sessions directory exists and is writable. {{{1
+
 let s:directory = fnamemodify(g:session_directory, ':p')
 if !isdirectory(s:directory)
   call mkdir(s:directory, 'p')
@@ -81,61 +123,72 @@ if filewritable(s:directory) != 2
 endif
 unlet s:directory
 
-" Define automatic commands for automatic session management.
+" Menu items to make the plug-in more accessible. {{{1
+
+if g:session_menu
+  amenu 400.10 &Sessions.&Open\ session\.\.\.<Tab>:OpenSession :OpenSession<CR>
+  amenu 400.20 &Sessions.&Save\ session\.\.\.<Tab>:SaveSession :SaveSession<CR>
+  amenu 400.30 &Sessions.&Close\ session\.\.\.<Tab>:CloseSession :CloseSession<CR>
+  amenu 400.40 &Sessions.&Delete\ session\.\.\.<Tab>:DeleteSession :DeleteSession<CR>
+  amenu 400.50 &Sessions.&View\ session\.\.\.<Tab>:ViewSession :ViewSession<CR>
+  amenu 400.60 &Sessions.-Sep1- :
+  amenu 400.70 &Sessions.Open\ tab\ session\.\.\.<Tab>:OpenTabSession :OpenTabSession<CR>
+  amenu 400.80 &Sessions.&Append\ tab\ session\.\.\.<Tab>:AppendTabSession :AppendTabSession<CR>
+  amenu 400.90 &Sessions.Save\ tab\ session\.\.\.<Tab>:SaveTabSession :SaveTabSession<CR>
+  amenu 400.100 &Sessions.Close\ tab\ session\.\.\.<Tab>:CloseTabSession :CloseTabSession<CR>
+  amenu 400.110 &Sessions.-Sep2- :
+  amenu 400.120 &Sessions.&Restart\ Vim\.\.\.<Tab>:RestartVim :RestartVim<CR>
+endif
+
+" Automatic commands for automatic session management. {{{1
+
 augroup PluginSession
   autocmd!
   au VimEnter * nested call xolox#session#auto_load()
+  au CursorHold,CursorHoldI * call xolox#session#auto_save_periodic()
   au VimLeavePre * call xolox#session#auto_save()
   au VimLeavePre * call xolox#session#auto_unlock()
-  au BufEnter * call xolox#session#auto_dirty_check()
 augroup END
 
-" Define commands that enable users to manage multiple named sessions.
-command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names OpenSession call xolox#session#open_cmd(<q-args>, <q-bang>)
+" Plug-in commands (user defined commands). {{{1
+
+" Define commands that enable users to manage multiple named, heavy-weight
+" sessions (used to persist/restore a complete Vim editing session including
+" one or more tab pages).
+command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names OpenSession call xolox#session#open_cmd(<q-args>, <q-bang>, 'OpenSession')
 command! -bar -nargs=? -complete=customlist,xolox#session#complete_names ViewSession call xolox#session#view_cmd(<q-args>)
-command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SaveSession call xolox#session#save_cmd(<q-args>, <q-bang>)
+command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SaveSession call xolox#session#save_cmd(<q-args>, <q-bang>, 'SaveSession')
 command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names DeleteSession call xolox#session#delete_cmd(<q-args>, <q-bang>)
-command! -bar -bang CloseSession call xolox#session#close_cmd(<q-bang>, 0)
+command! -bar -bang CloseSession call xolox#session#close_cmd(<q-bang>, 0, 1, 'CloseSession')
+
+" Define commands that enable users to manage multiple named, light-weight
+" sessions (used to persist/restore the window layout of a single tab page).
+command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names OpenTabSession call xolox#session#open_tab_cmd(<q-args>, <q-bang>, 'OpenTabSession')
+command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SaveTabSession call xolox#session#save_tab_cmd(<q-args>, <q-bang>, 'SaveTabSession')
+command! -bar -bang -count=94919 -nargs=? -complete=customlist,xolox#session#complete_names AppendTabSession call xolox#session#append_tab_cmd(<q-args>, <q-bang>, <count>, 'AppendTabSession')
+command! -bar -bang CloseTabSession call xolox#session#close_tab_cmd(<q-bang>, 'CloseTabSession')
+
+" Define a command to restart Vim editing sessions.
 command! -bang -nargs=* -complete=command RestartVim call xolox#session#restart_cmd(<q-bang>, <q-args>)
 
-if &sessionoptions =~ '\<tabpages\>'
-  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SaveTabSession
-  \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#save_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names OpenTabSession
-  \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#open_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-  command! -bar -bang -count=94919 -nargs=? -complete=customlist,xolox#session#complete_names AppendTabSession
-  \ execute (<count> == 94919 ? '' : '<count>') . 'tabnew' |
-  \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#open_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-  command! -bar -bang CloseTabSession
-  \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#close_cmd(<q-bang>, 0)       | finally | call xolox#session#PopTabSessionOptions() | endtry
-endif
-
+" Plug-in command aliases. {{{2
 
 if g:session_command_aliases
   " Define command aliases of the form "Session" + Action in addition to
   " the real command names which are of the form Action + "Session" (above).
-  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionOpen call xolox#session#open_cmd(<q-args>, <q-bang>)
+  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionOpen call xolox#session#open_cmd(<q-args>, <q-bang>, 'SessionOpen')
   command! -bar -nargs=? -complete=customlist,xolox#session#complete_names SessionView call xolox#session#view_cmd(<q-args>)
-  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionSave call xolox#session#save_cmd(<q-args>, <q-bang>)
+  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionSave call xolox#session#save_cmd(<q-args>, <q-bang>, 'SessionSave')
   command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionDelete call xolox#session#delete_cmd(<q-args>, <q-bang>)
-  command! -bar -bang SessionClose call xolox#session#close_cmd(<q-bang>, 0)
-
-  if &sessionoptions =~ '\<tabpages\>'
-    command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names TabSessionSave
-    \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#save_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-    command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names TabSessionOpen
-    \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#open_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-    command! -bar -bang -count=94919 -nargs=? -complete=customlist,xolox#session#complete_names TabSessionAppend
-    \ execute (<count> == 94919 ? '' : '<count>') . 'tabnew' |
-    \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#open_cmd(<q-args>, <q-bang>) | finally | call xolox#session#PopTabSessionOptions() | endtry
-    command! -bar -bang TabSessionClose
-    \ call xolox#session#PushTabSessionOptions() | try | call xolox#session#close_cmd(<q-bang>, 0)       | finally | call xolox#session#PopTabSessionOptions() | endtry
-  endif
+  command! -bar -bang SessionClose call xolox#session#close_cmd(<q-bang>, 0, 1, 'SessionClose')
+  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionTabOpen call xolox#session#open_tab_cmd(<q-args>, <q-bang>, 'SessionTabOpen')
+  command! -bar -bang -nargs=? -complete=customlist,xolox#session#complete_names SessionTabSave call xolox#session#save_tab_cmd(<q-args>, <q-bang>, 'SessionTabSave')
+  command! -bar -bang -count=94919 -nargs=? -complete=customlist,xolox#session#complete_names SessionTabAppend call xolox#session#append_tab_cmd(<q-args>, <q-bang>, <count>, 'SessionTabAppend')
+  command! -bar -bang SessionTabClose call xolox#session#close_tab_cmd(<q-bang>, 'SessionTabClose')
 endif
 
-" Don't reload the plug-in once it has loaded successfully.
+" Don't reload the plug-in once it has loaded successfully. {{{1
+
 let g:loaded_session = 1
 
-let &cpo = s:save_cpo
-unlet s:save_cpo
 " vim: ts=2 sw=2 et
