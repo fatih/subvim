@@ -1,0 +1,177 @@
+*SearchParty.txt*	Plugin that enhances search & highlight
+
+
+			VIM REFERENCE MANUAL	by Barry Arthur
+
+
+Help on using SearchParty                                        *SearchParty*
+
+1. Introduction					|SearchParty-intro|
+2. Usage					|SearchParty-usage|
+
+==============================================================================
+ 1. INTRODUCTION                                           *SearchParty-intro*
+
+SearchParty provides extended search tools for Vim, such as searching for the
+current visual selection (forwards and backwards), using the current visual
+selection in a |:substitute|, performing literal (non regex) searches,
+controlling current search highlight, highlighting arbitrary strings and
+highlighting terms in :g// output.
+
+==============================================================================
+ 2. USAGE                                                  *SearchParty-usage*
+
+Note: All of the default maps shown below can be overridden using the <Plug>
+maps given.
+
+Visual Searches~
+
+SearchParty provides three visual mode search tools:
+
+  *	Searches for the next occurrence of the currently selected visual text.
+	<Plug>SearchPartyVisualFindNext
+
+  #	Searches for the prior occurrence of the currently selected visual text.
+	<Plug>SearchPartyVisualFindPrior
+
+  &	Starts a |:substitute| using the currently selected visual text.
+	<Plug>SearchPartyVisualFindSubstitute
+
+Literal Search~
+
+SearchParty provides a normal mode literal text (without regular expression
+magic) search:
+
+  <leader>/  Prompts for a literal string to search for. This does NOT
+             use a regular expression, so the characters you type here will be
+             searched for literally without any magic interpretation.  The
+             |<Up>| key scrolls through prior literal search history.
+             <Plug>SearchPartyFindLiteral
+
+Search Highlighting~
+
+SearchParty provides the following normal mode search highlight tools:
+
+  <C-L>      Temporarily clears search highlight and disables M.A.S.H.
+             <Plug>SearchPartyHighlightClear
+
+  <C-BSlash> Toggles search highlighting.
+             <Plug>SearchPartyHighlightToggle
+
+  <leader>*  Highlights all occurrences of |word| under the cursor.
+             <Plug>SearchPartyHighlightWord
+
+  <leader>g* Highlights all occurrences of |WORD| under the cursor.
+             <Plug>SearchPartyHighlightWORD
+
+Highlighting Print Command~
+
+SearchParty provides a command, :P, which highlights the current search term
+in its output. This command is especially useful as a |:global| subcommand:
+>
+  :g/something/P
+<
+Will show the matching lines with all occurrences of `something` on those
+lines highlighted.
+
+The :P command can be used as a standalone command too:
+>
+  :10,20 P
+<
+Will show lines 10 through 20, highlighting all occurrences of the current
+search pattern.
+
+Pattern Searches~
+
+  <leader>ms Prompts for a pattern and sets the current search to that pattern
+             without moving the cursor to the next match of that pattern.
+             <Plug>SearchPartySetSearch
+
+Matches~
+
+  <leader>mm Prompts for a pattern and uses |matchadd()| to highlight all
+             occurrences of that pattern in the current window.
+             <Plug>SearchPartySetMatch
+
+             There are six match patterns available, called SPM1-SPM6
+             respectively. Using more than six matches will recycle through
+             the SPM set, losing the previous match assigned to that slot.
+
+             By default, the terminal palette colours #1-#6 are used for
+             SPM1-SPM6. You can override these by providing lines like this in
+             your ~/.vimrc file:
+>
+               hi SPM1 ctermbg=123
+<
+             NOTE: Do this after you have set your colorscheme.
+
+                               *SearchPartyMatchDelete* *SearchPartyMatchList*
+                                                    *SearchPartyMatchNumber*
+             The following functions and commands are available for Search
+             Party matches:
+             * SearchPartyMatchDelete(number) - clear match by number
+             * SearchPartyMatchList - list all match patterns
+             * SearchPartyMatchNumber(number) - reset match number (1-6)
+
+                                                            *SearchPartyMash*
+M.A.S.H.~
+
+Mash is a motion activated (lol - er, I mean, when you press n/N/#/*/g#/g*)
+current search match highlighter. Breaking that down for you, it highlights
+the match under the cursor differently to all the other matches (if you have
+:set hlsearch activated). If you don't use hlsearch, then it will still
+highlight the current match.
+
+                                                     *SearchPartyMash-unmash*
+
+Use CTRL-L to clear the current mash highlighting. This can be customised in
+|mash-key-maps|.
+
+                                                        *SearchPartyMash-fow*
+
+Mash also provides a Fog of War mode where all non-matched text is greyed out.
+Activate and disable (toggle) the FOW mode with <leader>mf . This can be
+customised in  |mash-key-maps|.
+
+Configuration                                 *SearchPartyMash-configuration*
+
+Mash currently uses the built in Search and IncSearch highlight groups. Change
+these if you want to use different colours or attributes. For example, if you
+like the limelight:
+>
+  hi Search term=reverse ctermfg=White ctermbg=DarkGreen guifg=White guibg=DarkGreen
+  hi IncSearch term=bold cterm=bold ctermfg=Black ctermbg=DarkGreen gui=bold guifg=LightYellow guibg=DarkGreen
+<
+If you use a dark-grey background, a black FOW is near invisible:
+>
+  hi MashFOW ctermfg=black ctermbg=none guifg=black guibg=none
+<
+
+Mash Key Maps                                      *SearchPartyMash-key-maps*
+
+You can customise the actual key used to enable and disable Fog of War mode.
+For example, to map the |mash-fow| enable key (which is, by default, mapped to
+<leader>mf) to <leader>f, put the following in your ~/.vimrc :
+>
+  nmap <leader>f <Plug>MashFOWEnable
+<
+The following map targets are available for remapping in your ~/.vimrc :
+>
+  <Plug>MashFOWEnable              defaults to <leader>mf
+  <Plug>MashFOWDisable             defaults to <leader>mF
+  <Plug>SearchPartyHighlightClear  defaults to <c-l>
+<
+
+Ignorecase~
+
+Mash respects the current 'ignorecase' option setting.
+
+Issues                                          *SearchPartyMash-issues*
+
+Mash fails if the search uses an offset other than start-of-pattern,
+like:
+>
+     /foo/e
+<
+
+ vim:tw=78:ts=8:ft=help:norl:

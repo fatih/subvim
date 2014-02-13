@@ -1,0 +1,73 @@
+SearchParty
+-----------
+
+_Enhanced searches, highlights and matches for Vim_
+
+Visual Searches
+~~~~~~~~~~~~~~~
+
+* +*+  Searches for the next occurrence of the currently selected visual text.
+       +<Plug>SearchPartyVisualFindNext+
+
+* +#+  Searches for the prior occurrence of the currently selected visual text.
+       +<Plug>SearchPartyVisualFindPrior+
+
+* +&+  Starts a +:substitute+ using the currently selected visual text.
+       +<Plug>SearchPartyVisualFindSubstitute+
+
+Literal Search
+~~~~~~~~~~~~~~
+
+* +<leader>/+ Prompts for a literal string to search for. This does
+              NOT use a regular expression, so the characters you type
+              here will be searched for literally without any magic
+              interpretation. The +<Up>+ key scrolls through prior
+              literal search history.
+              +<Plug>SearchPartyFindLiteral+
+
+Search Highlighting
+~~~~~~~~~~~~~~~~~~~
+
+* +<C-L>+      Temporarily clears search highlight.
+               +<Plug>SearchPartyHighlightClear+
+
+* +<C-BSlash>+ Toggles search highlighting.
+               +<Plug>SearchPartyHighlightToggle+
+
+* +<leader>*+  Highlights all occurrences of +word+ under the cursor.
+               +<Plug>SearchPartyHighlightWord+
+
+* +<leader>g*+ Highlights all occurrences of +WORD+ under the cursor.
+               +<Plug>SearchPartyHighlightWORD+
+
+Pattern Searches
+~~~~~~~~~~~~~~~~
+
+* +<leader>ms+ Prompts for a pattern and sets the current search to
+               that pattern without moving the cursor to the next
+               match of that pattern.
+               +<Plug>SearchPartySetSearch+
+
+Matches
+~~~~~~~
+
+* +<leader>mm+ Prompts for a pattern and uses +matchadd()+ to highlight all
+               occurrences of that pattern in the current window.
+               +<Plug>SearchPartySetMatch+
++
+There are six match patterns available, called +SPM1+-+SPM6+ respectively.
+Using more than six matches will recycle through the SPM set, losing
+the previous match assigned to that slot.
++
+By default, the terminal palette colours #1-#6 are used for +SPM1+-+SPM6+.
+You can override these by providing lines like this in your +~/.vimrc+ file:
++
+  hi SPM1 ctermbg=123
++
+NOTE: Do this after you have set your colorscheme.
+
+The following functions and commands are available for Search Party matches:
+
+* +SearchPartyMatchDelete(number)+ - clear match by number
+* +SearchPartyMatchList+ - list all match patterns
+* +SearchPartyMatchNumber(number)+ - reset match number (+1-6+)
