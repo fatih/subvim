@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+# Copyright (C) 2011, 2012  Google Inc.
 #
 # This file is part of YouCompleteMe.
 #
@@ -20,8 +20,8 @@
 import ycm_core
 from ycm.completers.cpp.clang_completer import ClangCompleter
 
-def GetCompleter():
+def GetCompleter( user_options ):
   if ycm_core.HasClangSupport():
-    return ClangCompleter()
+    return ClangCompleter( user_options )
   else:
     return None

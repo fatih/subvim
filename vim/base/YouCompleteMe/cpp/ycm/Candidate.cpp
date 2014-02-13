@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+// Copyright (C) 2011, 2012  Google Inc.
 //
 // This file is part of YouCompleteMe.
 //
@@ -32,17 +32,6 @@ LetterNode *FirstUppercaseNode( const std::list< LetterNode *> &list ) {
   LetterNode *node = NULL;
   foreach( LetterNode * current_node, list ) {
     if ( current_node->LetterIsUppercase() ) {
-      node = current_node;
-      break;
-    }
-  }
-  return node;
-}
-
-LetterNode *FirstLowercaseNode( const std::list< LetterNode *> &list ) {
-  LetterNode *node = NULL;
-  foreach( LetterNode * current_node, list ) {
-    if ( !current_node->LetterIsUppercase() ) {
       node = current_node;
       break;
     }
@@ -107,9 +96,13 @@ Result Candidate::QueryMatchResult( const std::string &query,
       return Result( false );
 
     if ( case_sensitive ) {
+      // When the query letter is uppercase, then we force an uppercase match
+      // but when the query letter is lowercase, then it can match both an
+      // uppercase and a lowercase letter. This is by design and it's much
+      // better than forcing lowercase letter matches.
       node = IsUppercase( letter ) ?
              FirstUppercaseNode( *list ) :
-             FirstLowercaseNode( *list );
+             list->front();
 
       if ( !node )
         return Result( false );

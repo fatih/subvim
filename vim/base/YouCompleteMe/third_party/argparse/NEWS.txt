@@ -1,0 +1,6 @@
+What's New in argparse 1.2
+==========================
+
+- fixed Issue #79: re-licensed argparse package under same license as py 2.7 stdlib argparse code
+- fixed Issue #80: argparse 1.2 is now same archive on pypi / on google code
+

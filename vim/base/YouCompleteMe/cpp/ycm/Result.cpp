@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+// Copyright (C) 2011, 2012  Google Inc.
 //
 // This file is part of YouCompleteMe.
 //
@@ -19,13 +19,40 @@
 #include "standard.h"
 #include "Utils.h"
 #include <boost/algorithm/string.hpp>
+#include <boost/function.hpp>
 #include <algorithm>
+#include <locale>
 
 using boost::algorithm::istarts_with;
 
 namespace YouCompleteMe {
 
 namespace {
+
+char ChangeCharCase( char c ) {
+  if ( std::isupper( c, std::locale() ) )
+    return std::tolower( c, std::locale() );
+  return std::toupper( c, std::locale() );
+}
+
+
+bool CharLessThanWithLowercasePriority(const char &first,
+                                       const char &second) {
+  char swap_first = ChangeCharCase( first );
+  char swap_second = ChangeCharCase( second );
+  return swap_first < swap_second;
+}
+
+
+bool StringLessThanWithLowercasePriority(const std::string &first,
+                                         const std::string &second) {
+  return std::lexicographical_compare(
+      first.begin(), first.end(),
+      second.begin(), second.end(),
+      boost::function< bool( const char&, const char& ) >(
+          &CharLessThanWithLowercasePriority ) );
+}
+
 
 int LongestCommonSubsequenceLength( const std::string &first,
                                     const std::string &second ) {
@@ -168,8 +195,9 @@ bool Result::operator< ( const Result &other ) const {
       return text_is_lowercase_;
   }
 
-  // Lexicographic comparison
-  return *text_ < *other.text_;
+  // Lexicographic comparison, but we prioritize lowercase letters over
+  // uppercase ones. So "foo" < "Foo".
+  return StringLessThanWithLowercasePriority( *text_, *other.text_ );
 }
 
 

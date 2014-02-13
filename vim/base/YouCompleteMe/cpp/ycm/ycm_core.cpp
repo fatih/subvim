@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+// Copyright (C) 2011, 2012  Google Inc.
 //
 // This file is part of YouCompleteMe.
 //
@@ -17,7 +17,7 @@
 
 #include "IdentifierCompleter.h"
 #include "PythonSupport.h"
-#include "Future.h"
+#include "versioning.h"
 
 #ifdef USE_CLANG_COMPLETER
 #  include "ClangCompleter.h"
@@ -25,6 +25,7 @@
 #  include "CompletionData.h"
 #  include "Diagnostic.h"
 #  include "Location.h"
+#  include "Range.h"
 #  include "UnsavedFile.h"
 #  include "CompilationDatabase.h"
 #endif // USE_CLANG_COMPLETER
@@ -33,20 +34,12 @@
 #include <boost/utility.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
-bool HasClangSupport()
-{
+bool HasClangSupport() {
 #ifdef USE_CLANG_COMPLETER
   return true;
 #else
   return false;
 #endif // USE_CLANG_COMPLETER
-}
-
-int YcmCoreVersion()
-{
-  // We increment this every time when we want to force users to recompile
-  // ycm_core.
-  return 4;
 }
 
 
@@ -55,47 +48,30 @@ BOOST_PYTHON_MODULE(ycm_core)
   using namespace boost::python;
   using namespace YouCompleteMe;
 
+  // Necessary because of usage of the ReleaseGil class
+  PyEval_InitThreads();
+
   def( "HasClangSupport", HasClangSupport );
   def( "FilterAndSortCandidates", FilterAndSortCandidates );
   def( "YcmCoreVersion", YcmCoreVersion );
 
   class_< IdentifierCompleter, boost::noncopyable >( "IdentifierCompleter" )
-    .def( "EnableThreading", &IdentifierCompleter::EnableThreading )
     .def( "AddIdentifiersToDatabase",
           &IdentifierCompleter::AddIdentifiersToDatabase )
-    .def( "AddIdentifiersToDatabaseFromTagFilesAsync",
-          &IdentifierCompleter::AddIdentifiersToDatabaseFromTagFilesAsync )
-    .def( "AddIdentifiersToDatabaseFromBufferAsync",
-          &IdentifierCompleter::AddIdentifiersToDatabaseFromBufferAsync )
-    .def( "CandidatesForQueryAndTypeAsync",
-          &IdentifierCompleter::CandidatesForQueryAndTypeAsync );
+    .def( "AddIdentifiersToDatabaseFromTagFiles",
+          &IdentifierCompleter::AddIdentifiersToDatabaseFromTagFiles )
+    .def( "AddIdentifiersToDatabaseFromBuffer",
+          &IdentifierCompleter::AddIdentifiersToDatabaseFromBuffer )
+    .def( "CandidatesForQueryAndType",
+          &IdentifierCompleter::CandidatesForQueryAndType );
 
   // TODO: rename these *Vec classes to *Vector; don't forget the python file
   class_< std::vector< std::string >,
       boost::shared_ptr< std::vector< std::string > > >( "StringVec" )
     .def( vector_indexing_suite< std::vector< std::string > >() );
 
-  class_< Future< AsyncResults > >( "FutureResults" )
-    .def( "ResultsReady", &Future< AsyncResults >::ResultsReady )
-    .def( "GetResults", &Future< AsyncResults >::GetResults );
-
-  class_< Future< void > >( "FutureVoid" )
-    .def( "ResultsReady", &Future< void >::ResultsReady )
-    .def( "GetResults", &Future< void >::GetResults );
-
 #ifdef USE_CLANG_COMPLETER
   def( "ClangVersion", ClangVersion );
-
-  class_< Future< AsyncCompletions > >( "FutureCompletions" )
-    .def( "ResultsReady", &Future< AsyncCompletions >::ResultsReady )
-    .def( "GetResults", &Future< AsyncCompletions >::GetResults );
-
-  class_< Future< AsyncCompilationInfoForFile > >(
-      "FutureCompilationInfoForFile" )
-    .def( "ResultsReady",
-          &Future< AsyncCompilationInfoForFile >::ResultsReady )
-    .def( "GetResults",
-          &Future< AsyncCompilationInfoForFile >::GetResults );
 
   // CAREFUL HERE! For filename and contents we are referring directly to
   // Python-allocated and -managed memory since we are accepting pointers to
@@ -116,17 +92,13 @@ BOOST_PYTHON_MODULE(ycm_core)
     .def( vector_indexing_suite< std::vector< UnsavedFile > >() );
 
   class_< ClangCompleter, boost::noncopyable >( "ClangCompleter" )
-    .def( "EnableThreading", &ClangCompleter::EnableThreading )
-    .def( "DiagnosticsForFile", &ClangCompleter::DiagnosticsForFile )
     .def( "GetDeclarationLocation", &ClangCompleter::GetDeclarationLocation )
     .def( "GetDefinitionLocation", &ClangCompleter::GetDefinitionLocation )
-    .def( "DeleteCachesForFileAsync",
-          &ClangCompleter::DeleteCachesForFileAsync )
+    .def( "DeleteCachesForFile", &ClangCompleter::DeleteCachesForFile )
     .def( "UpdatingTranslationUnit", &ClangCompleter::UpdatingTranslationUnit )
-    .def( "UpdateTranslationUnitAsync",
-          &ClangCompleter::UpdateTranslationUnitAsync )
-    .def( "CandidatesForQueryAndLocationInFileAsync",
-          &ClangCompleter::CandidatesForQueryAndLocationInFileAsync );
+    .def( "UpdateTranslationUnit", &ClangCompleter::UpdateTranslationUnit )
+    .def( "CandidatesForLocationInFile",
+          &ClangCompleter::CandidatesForLocationInFile );
 
   class_< CompletionData >( "CompletionData" )
     .def( "TextToInsertInBuffer", &CompletionData::TextToInsertInBuffer )
@@ -137,17 +109,8 @@ BOOST_PYTHON_MODULE(ycm_core)
     .def_readonly( "kind_", &CompletionData::kind_ );
 
   class_< std::vector< CompletionData >,
-      boost::shared_ptr< std::vector< CompletionData > > >(
-          "CompletionVec" )
+      boost::shared_ptr< std::vector< CompletionData > > >( "CompletionVec" )
     .def( vector_indexing_suite< std::vector< CompletionData > >() );
-
-  class_< Diagnostic >( "Diagnostic" )
-    .def_readonly( "line_number_", &Diagnostic::line_number_ )
-    .def_readonly( "column_number_", &Diagnostic::column_number_ )
-    .def_readonly( "kind_", &Diagnostic::kind_ )
-    .def_readonly( "filename_", &Diagnostic::filename_ )
-    .def_readonly( "text_", &Diagnostic::text_ )
-    .def_readonly( "long_formatted_text_", &Diagnostic::long_formatted_text_ );
 
   class_< Location >( "Location" )
     .def_readonly( "line_number_", &Location::line_number_ )
@@ -155,18 +118,32 @@ BOOST_PYTHON_MODULE(ycm_core)
     .def_readonly( "filename_", &Location::filename_ )
     .def( "IsValid", &Location::IsValid );
 
+  class_< Range >( "Range" )
+    .def_readonly( "start_", &Range::start_ )
+    .def_readonly( "end_", &Range::end_ );
+
+  class_< std::vector< Range > >( "RangeVec" )
+    .def( vector_indexing_suite< std::vector< Range > >() );
+
+  class_< Diagnostic >( "Diagnostic" )
+    .def_readonly( "ranges_", &Diagnostic::ranges_ )
+    .def_readonly( "location_", &Diagnostic::location_ )
+    .def_readonly( "location_extent_", &Diagnostic::location_extent_ )
+    .def_readonly( "kind_", &Diagnostic::kind_ )
+    .def_readonly( "text_", &Diagnostic::text_ )
+    .def_readonly( "long_formatted_text_", &Diagnostic::long_formatted_text_ );
+
   class_< std::vector< Diagnostic > >( "DiagnosticVec" )
     .def( vector_indexing_suite< std::vector< Diagnostic > >() );
 
   class_< CompilationDatabase, boost::noncopyable >(
       "CompilationDatabase", init< std::string >() )
-    .def( "EnableThreading", &CompilationDatabase::EnableThreading )
     .def( "DatabaseSuccessfullyLoaded",
           &CompilationDatabase::DatabaseSuccessfullyLoaded )
+    .def( "AlreadyGettingFlags",
+          &CompilationDatabase::AlreadyGettingFlags )
     .def( "GetCompilationInfoForFile",
-          &CompilationDatabase::GetCompilationInfoForFile )
-    .def( "GetCompilationInfoForFileAsync",
-          &CompilationDatabase::GetCompilationInfoForFileAsync );
+          &CompilationDatabase::GetCompilationInfoForFile );
 
   class_< CompilationInfoForFile,
       boost::shared_ptr< CompilationInfoForFile > >(

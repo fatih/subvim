@@ -1,6 +1,6 @@
 /*
 * Copyright (c) 2008, Power of Two Games LLC
-*               2010, Strahinja Markovic
+*               2013, Google Inc.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are met:
@@ -53,7 +53,7 @@ FailBehavior ReportFailure(const char* condition,
 
 #if defined(_MSC_VER)
 #   define X_HALT() __debugbreak()
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) || defined(__clang__)
 #   define X_HALT() __builtin_trap()
 #else
 #    define X_HALT() exit(__LINE__)

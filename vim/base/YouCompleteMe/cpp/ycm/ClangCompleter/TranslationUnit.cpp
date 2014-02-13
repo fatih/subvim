@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+// Copyright (C) 2011, 2012  Google Inc.
 //
 // This file is part of YouCompleteMe.
 //
@@ -20,6 +20,7 @@
 #include "standard.h"
 #include "exceptions.h"
 #include "ClangUtils.h"
+#include "ClangHelpers.h"
 
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
@@ -56,13 +57,15 @@ TranslationUnit::TranslationUnit(
 
   std::vector< CXUnsavedFile > cxunsaved_files =
     ToCXUnsavedFiles( unsaved_files );
+  const CXUnsavedFile *unsaved = cxunsaved_files.size() > 0
+                                 ? &cxunsaved_files[ 0 ] : NULL;
 
   clang_translation_unit_ = clang_parseTranslationUnit(
                               clang_index,
                               filename.c_str(),
                               &pointer_flags[ 0 ],
                               pointer_flags.size(),
-                              &cxunsaved_files[ 0 ],
+                              const_cast<CXUnsavedFile *>( unsaved ),
                               cxunsaved_files.size(),
                               clang_defaultEditingTranslationUnitOptions() );
 
@@ -90,25 +93,11 @@ void TranslationUnit::Destroy() {
 
 
 std::vector< Diagnostic > TranslationUnit::LatestDiagnostics() {
-  std::vector< Diagnostic > diagnostics;
-
   if ( !clang_translation_unit_ )
-    return diagnostics;
+    return std::vector< Diagnostic >();
 
   unique_lock< mutex > lock( diagnostics_mutex_ );
-
-  // We don't need the latest diags after we return them once so we swap the
-  // internal data with a new, empty diag vector. This vector is then returned
-  // and on C++11 compilers a move ctor is invoked, thus no copy is created.
-  // Theoretically, just returning the value of a
-  // [boost::|std::]move(latest_diagnostics_) call _should_ leave the
-  // latest_diagnostics_ vector in an emtpy, valid state but I'm not going to
-  // rely on that. I just had to look this up in the standard to be sure, and
-  // future readers of this code (myself included) should not be forced to do
-  // that to understand what the hell is going on.
-
-  std::swap( latest_diagnostics_, diagnostics );
-  return diagnostics;
+  return latest_diagnostics_;
 }
 
 
@@ -123,12 +112,15 @@ bool TranslationUnit::IsCurrentlyUpdating() const {
 }
 
 
-void TranslationUnit::Reparse(
+std::vector< Diagnostic > TranslationUnit::Reparse(
   const std::vector< UnsavedFile > &unsaved_files ) {
   std::vector< CXUnsavedFile > cxunsaved_files =
     ToCXUnsavedFiles( unsaved_files );
 
   Reparse( cxunsaved_files );
+
+  unique_lock< mutex > lock( diagnostics_mutex_ );
+  return latest_diagnostics_;
 }
 
 
@@ -154,6 +146,8 @@ std::vector< CompletionData > TranslationUnit::CandidatesForLocation(
 
   std::vector< CXUnsavedFile > cxunsaved_files =
     ToCXUnsavedFiles( unsaved_files );
+  const CXUnsavedFile *unsaved = cxunsaved_files.size() > 0
+                                 ? &cxunsaved_files[ 0 ] : NULL;
 
   // codeCompleteAt reparses the TU if the underlying source file has changed on
   // disk since the last time the TU was updated and there are no unsaved files.
@@ -170,7 +164,7 @@ std::vector< CompletionData > TranslationUnit::CandidatesForLocation(
                           filename_.c_str(),
                           line,
                           column,
-                          &cxunsaved_files[ 0 ],
+                          const_cast<CXUnsavedFile *>( unsaved ),
                           cxunsaved_files.size(),
                           clang_defaultCodeCompleteOptions() ),
     clang_disposeCodeCompleteResults );
@@ -200,8 +194,7 @@ Location TranslationUnit::GetDeclarationLocation(
   if ( !CursorIsValid( referenced_cursor ) )
     return Location();
 
-  return LocationFromSourceLocation(
-           clang_getCursorLocation( referenced_cursor ) );
+  return Location( clang_getCursorLocation( referenced_cursor ) );
 }
 
 Location TranslationUnit::GetDefinitionLocation(
@@ -224,8 +217,7 @@ Location TranslationUnit::GetDefinitionLocation(
   if ( !CursorIsValid( definition_cursor ) )
     return Location();
 
-  return LocationFromSourceLocation(
-           clang_getCursorLocation( definition_cursor ) );
+  return Location( clang_getCursorLocation( definition_cursor ) );
 }
 
 
@@ -250,9 +242,12 @@ void TranslationUnit::Reparse( std::vector< CXUnsavedFile > &unsaved_files,
     if ( !clang_translation_unit_ )
       return;
 
+    CXUnsavedFile *unsaved = unsaved_files.size() > 0
+                             ? &unsaved_files[ 0 ] : NULL;
+
     failure = clang_reparseTranslationUnit( clang_translation_unit_,
                                             unsaved_files.size(),
-                                            &unsaved_files[ 0 ],
+                                            unsaved,
                                             parse_options );
   }
 
@@ -275,9 +270,10 @@ void TranslationUnit::UpdateLatestDiagnostics() {
 
   for ( uint i = 0; i < num_diagnostics; ++i ) {
     Diagnostic diagnostic =
-      DiagnosticWrapToDiagnostic(
+      BuildDiagnostic(
         DiagnosticWrap( clang_getDiagnostic( clang_translation_unit_, i ),
-                        clang_disposeDiagnostic ) );
+                        clang_disposeDiagnostic ),
+        clang_translation_unit_ );
 
     if ( diagnostic.kind_ != 'I' )
       latest_diagnostics_.push_back( diagnostic );
@@ -297,20 +293,6 @@ CXCursor TranslationUnit::GetCursor( int line, int column ) {
                                        column );
 
   return clang_getCursor( clang_translation_unit_, source_location );
-}
-
-Location TranslationUnit::LocationFromSourceLocation(
-  CXSourceLocation source_location ) {
-  // ASSUMES A LOCK IS ALREADY HELD ON clang_access_mutex_!
-  if ( !clang_translation_unit_ )
-    return Location();
-
-  CXFile file;
-  uint line;
-  uint column;
-  uint offset;
-  clang_getExpansionLocation( source_location, &file, &line, &column, &offset );
-  return Location( CXFileToFilepath( file ), line, column );
 }
 
 } // namespace YouCompleteMe

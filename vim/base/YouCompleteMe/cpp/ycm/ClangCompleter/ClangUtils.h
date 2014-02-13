@@ -1,4 +1,4 @@
-// Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+// Copyright (C) 2011, 2012  Google Inc.
 //
 // This file is part of YouCompleteMe.
 //
@@ -18,29 +18,12 @@
 #ifndef CLANGUTILS_H_9MVHQLJS
 #define CLANGUTILS_H_9MVHQLJS
 
-#include "Diagnostic.h"
-#include "CompletionData.h"
-#include "UnsavedFile.h"
-
-#include <vector>
 #include <clang-c/Index.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
+#include <string>
 
 namespace YouCompleteMe {
 
-typedef boost::shared_ptr <
-boost::remove_pointer< CXDiagnostic >::type > DiagnosticWrap;
-
 std::string CXStringToString( CXString text );
-
-std::vector< CompletionData > ToCompletionDataVector(
-  CXCodeCompleteResults *results );
-
-std::vector< CXUnsavedFile > ToCXUnsavedFiles(
-  const std::vector< UnsavedFile > &unsaved_files );
-
-Diagnostic DiagnosticWrapToDiagnostic( DiagnosticWrap diagnostic_wrap );
 
 bool CursorIsValid( CXCursor cursor );
 

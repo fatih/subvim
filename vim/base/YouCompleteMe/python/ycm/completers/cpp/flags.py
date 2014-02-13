@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+# Copyright (C) 2011, 2012  Google Inc.
 #
 # This file is part of YouCompleteMe.
 #
@@ -19,14 +19,13 @@
 
 import ycm_core
 import os
-from ycm import vimsupport
+import inspect
 from ycm import extra_conf_store
+from ycm.utils import ToUtf8IfNeeded
+from ycm.server.responses import NoExtraConfDetected
 
-NO_EXTRA_CONF_FILENAME_MESSAGE = ('No {0} file detected, so no compile flags '
-  'are available. Thus no semantic support for C/C++/ObjC/ObjC++. Go READ THE '
-  'DOCS *NOW*, DON\'T file a bug report.').format(
-    extra_conf_store.YCM_EXTRA_CONF_FILENAME )
-
+INCLUDE_FLAGS = [ '-isystem', '-I', '-iquote', '--sysroot=', '-isysroot',
+                  '-include' ]
 
 class Flags( object ):
   """Keeps track of the flags necessary to compile a file.
@@ -40,26 +39,34 @@ class Flags( object ):
     self.no_extra_conf_file_warning_posted = False
 
 
-  def FlagsForFile( self, filename, add_special_clang_flags = True ):
+  def FlagsForFile( self,
+                    filename,
+                    add_special_clang_flags = True,
+                    client_data = None ):
     try:
       return self.flags_for_file[ filename ]
     except KeyError:
       module = extra_conf_store.ModuleForSourceFile( filename )
       if not module:
         if not self.no_extra_conf_file_warning_posted:
-          vimsupport.PostVimMessage( NO_EXTRA_CONF_FILENAME_MESSAGE )
           self.no_extra_conf_file_warning_posted = True
+          raise NoExtraConfDetected
         return None
 
-      results = module.FlagsForFile( filename )
+      results = _CallExtraConfFlagsForFile( module,
+                                            filename,
+                                            client_data )
 
-      if not results.get( 'flags_ready', True ):
+      if not results or not results.get( 'flags_ready', True ):
         return None
 
       flags = list( results[ 'flags' ] )
+      if not flags:
+        return None
+
       if add_special_clang_flags:
         flags += self.special_clang_flags
-      sanitized_flags = _PrepareFlagsForClang( flags, filename )
+      sanitized_flags = PrepareFlagsForClang( flags, filename )
 
       if results[ 'do_cache' ]:
         self.flags_for_file[ filename ] = sanitized_flags
@@ -95,7 +102,17 @@ class Flags( object ):
     self.flags_for_file.clear()
 
 
-def _PrepareFlagsForClang( flags, filename ):
+def _CallExtraConfFlagsForFile( module, filename, client_data ):
+  filename = ToUtf8IfNeeded( filename )
+  # For the sake of backwards compatibility, we need to first check whether the
+  # FlagsForFile function in the extra conf module even allows keyword args.
+  if inspect.getargspec( module.FlagsForFile ).keywords:
+    return module.FlagsForFile( filename, client_data = client_data )
+  else:
+    return module.FlagsForFile( filename )
+
+
+def PrepareFlagsForClang( flags, filename ):
   flags = _RemoveUnusedFlags( flags, filename )
   flags = _SanitizeFlags( flags )
   return flags
@@ -121,15 +138,20 @@ def _SanitizeFlags( flags ):
 
   vector = ycm_core.StringVec()
   for flag in sanitized_flags:
-    vector.append( flag )
+    vector.append( ToUtf8IfNeeded( flag ) )
   return vector
 
 
 def _RemoveUnusedFlags( flags, filename ):
   """Given an iterable object that produces strings (flags for Clang), removes
   the '-c' and '-o' options that Clang does not like to see when it's producing
-  completions for a file. Also removes the first flag in the list if it does not
-  start with a '-' (it's highly likely to be the compiler name/path)."""
+  completions for a file.
+
+  Also removes the first flag in the list if it does not
+  start with a '-' (it's highly likely to be the compiler name/path).
+
+  We also try to remove any stray filenames in the flags that aren't include
+  dirs."""
 
   new_flags = []
 
@@ -139,29 +161,46 @@ def _RemoveUnusedFlags( flags, filename ):
   if not flags[ 0 ].startswith( '-' ):
     flags = flags[ 1: ]
 
-  skip = False
+  skip_next = False
+  previous_flag_is_include = False
+  previous_flag_starts_with_dash = False
+  current_flag_starts_with_dash = False
   for flag in flags:
-    if skip:
-      skip = False
+    previous_flag_starts_with_dash = current_flag_starts_with_dash
+    current_flag_starts_with_dash = flag.startswith( '-' )
+    if skip_next:
+      skip_next = False
       continue
 
     if flag == '-c':
       continue
 
     if flag == '-o':
-      skip = True;
+      skip_next = True;
       continue
 
     if flag == filename or os.path.realpath( flag ) == filename:
       continue
 
+    # We want to make sure that we don't have any stray filenames in our flags;
+    # filenames that are part of include flags are ok, but others are not. This
+    # solves the case where we ask the compilation database for flags for
+    # "foo.cpp" when we are compiling "foo.h" because the comp db doesn't have
+    # flags for headers. The returned flags include "foo.cpp" and we need to
+    # remove that.
+    if ( not current_flag_starts_with_dash and
+          ( not previous_flag_starts_with_dash or
+            ( not previous_flag_is_include and '/' in flag ) ) ):
+      continue
+
     new_flags.append( flag )
+    previous_flag_is_include = flag in INCLUDE_FLAGS
   return new_flags
 
 
 def _SpecialClangIncludes():
   libclang_dir = os.path.dirname( ycm_core.__file__ )
   path_to_includes = os.path.join( libclang_dir, 'clang_includes' )
-  return [ '-I', path_to_includes ]
+  return [ '-isystem', path_to_includes ]
 
 

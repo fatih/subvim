@@ -1,16 +1,17 @@
 # Compiled Object files
-#*.slo
-#*.lo
-#*.o
+*.slo
+*.lo
+*.o
 
 # Compiled Dynamic libraries
-#*.so
-#*.dylib
+*.dll
+*.so
+*.dylib
 
 # Compiled Static libraries
-#*.lai
-#*.la
-#*.a
+*.lai
+*.la
+*.a
 
 # CMake
 CMakeCache.txt

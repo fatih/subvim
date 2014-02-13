@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Copyright (C) 2011, 2012  Strahinja Val Markovic  <val@markovic.io>
+# Copyright (C) 2011, 2012  Google Inc.
 #
 # This file is part of YouCompleteMe.
 #
@@ -18,6 +18,9 @@
 # along with YouCompleteMe.  If not, see <http://www.gnu.org/licenses/>.
 
 import vim
+import os
+import json
+from ycm.utils import ToUtf8IfNeeded
 
 def CurrentLineAndColumn():
   """Returns the 0-based current line and 0-based current column."""
@@ -46,12 +49,187 @@ def TextAfterCursor():
   return vim.current.line[ CurrentColumn(): ]
 
 
-def GetUnsavedBuffers():
-  def BufferModified( buffer_number ):
-    to_eval = 'getbufvar({0}, "&mod")'.format( buffer_number )
-    return GetBoolValue( to_eval )
+# Note the difference between buffer OPTIONS and VARIABLES; the two are not
+# the same.
+def GetBufferOption( buffer_object, option ):
+  # NOTE: We used to check for the 'options' property on the buffer_object which
+  # is available in recent versions of Vim and would then use:
+  #
+  #   buffer_object.options[ option ]
+  #
+  # to read the value, BUT this caused annoying flickering when the
+  # buffer_object was a hidden buffer (with option = 'ft'). This was all due to
+  # a Vim bug. Until this is fixed, we won't use it.
 
-  return ( x for x in vim.buffers if BufferModified( x.number ) )
+  to_eval = 'getbufvar({0}, "&{1}")'.format( buffer_object.number, option )
+  return GetVariableValue( to_eval )
+
+
+def GetUnsavedAndCurrentBufferData():
+  def BufferModified( buffer_object ):
+    return bool( int( GetBufferOption( buffer_object, 'mod' ) ) )
+
+  buffers_data = {}
+  for buffer_object in vim.buffers:
+    if not ( BufferModified( buffer_object ) or
+             buffer_object == vim.current.buffer ):
+      continue
+
+    buffers_data[ GetBufferFilepath( buffer_object ) ] = {
+      'contents': '\n'.join( buffer_object ),
+      'filetypes': FiletypesForBuffer( buffer_object )
+    }
+
+  return buffers_data
+
+
+def GetBufferNumberForFilename( filename, open_file_if_needed = True ):
+  return GetIntValue( "bufnr('{0}', {1})".format(
+      os.path.realpath( filename ),
+      int( open_file_if_needed ) ) )
+
+
+def GetCurrentBufferFilepath():
+  return GetBufferFilepath( vim.current.buffer )
+
+
+def BufferIsVisible( buffer_number ):
+  if buffer_number < 0:
+    return False
+  window_number = GetIntValue( "bufwinnr({0})".format( buffer_number ) )
+  return window_number != -1
+
+
+def GetBufferFilepath( buffer_object ):
+  if buffer_object.name:
+    return buffer_object.name
+  # Buffers that have just been created by a command like :enew don't have any
+  # buffer name so we use the buffer number for that.
+  return os.path.join( os.getcwd(), str( buffer_object.number ) )
+
+
+# NOTE: This unplaces *all* signs in a buffer, not just the ones we placed. We
+# used to track which signs we ended up placing and would then only unplace
+# ours, but that causes flickering Vim since we have to call
+#    sign unplace <id> buffer=<buffer-num>
+# in a loop. So we're forced to unplace all signs, which might conflict with
+# other Vim plugins.
+def UnplaceAllSignsInBuffer( buffer_number ):
+  if buffer_number < 0:
+    return
+  vim.command( 'sign unplace * buffer={0}'.format( buffer_number ) )
+
+
+def PlaceSign( sign_id, line_num, buffer_num, is_error = True ):
+  sign_name = 'YcmError' if is_error else 'YcmWarning'
+  vim.command( 'sign place {0} line={1} name={2} buffer={3}'.format(
+    sign_id, line_num, sign_name, buffer_num ) )
+
+
+def ClearYcmSyntaxMatches():
+  matches = VimExpressionToPythonType( 'getmatches()' )
+  for match in matches:
+    if match[ 'group' ].startswith( 'Ycm' ):
+      vim.eval( 'matchdelete({0})'.format( match[ 'id' ] ) )
+
+
+# Returns the ID of the newly added match
+# Both line and column numbers are 1-based
+def AddDiagnosticSyntaxMatch( line_num,
+                              column_num,
+                              line_end_num = None,
+                              column_end_num = None,
+                              is_error = True ):
+  group = 'YcmErrorSection' if is_error else 'YcmWarningSection'
+
+  if not line_end_num:
+    line_end_num = line_num
+
+  line_num, column_num = LineAndColumnNumbersClamped( line_num, column_num )
+  line_end_num, column_end_num = LineAndColumnNumbersClamped( line_end_num,
+                                                              column_end_num )
+
+  if not column_end_num:
+    return GetIntValue(
+      "matchadd('{0}', '\%{1}l\%{2}c')".format( group, line_num, column_num ) )
+  else:
+    return GetIntValue(
+      "matchadd('{0}', '\%{1}l\%{2}c\_.*\%{3}l\%{4}c')".format(
+        group, line_num, column_num, line_end_num, column_end_num ) )
+
+
+# Clamps the line and column numbers so that they are not past the contents of
+# the buffer. Numbers are 1-based.
+def LineAndColumnNumbersClamped( line_num, column_num ):
+  new_line_num = line_num
+  new_column_num = column_num
+
+  max_line = len( vim.current.buffer )
+  if line_num and line_num > max_line:
+    new_line_num = max_line
+
+  max_column = len( vim.current.buffer[ new_line_num - 1 ] )
+  if column_num and column_num > max_column:
+    new_column_num = max_column
+
+  return new_line_num, new_column_num
+
+
+def SetLocationList( diagnostics ):
+  """Diagnostics should be in qflist format; see ":h setqflist" for details."""
+  vim.eval( 'setloclist( 0, {0} )'.format( json.dumps( diagnostics ) ) )
+
+
+def ConvertDiagnosticsToQfList( diagnostics ):
+  def ConvertDiagnosticToQfFormat( diagnostic ):
+    # see :h getqflist for a description of the dictionary fields
+    # Note that, as usual, Vim is completely inconsistent about whether
+    # line/column numbers are 1 or 0 based in its various APIs. Here, it wants
+    # them to be 1-based.
+    location = diagnostic[ 'location' ]
+    return {
+      'bufnr' : GetBufferNumberForFilename( location[ 'filepath' ] ),
+      'lnum'  : location[ 'line_num' ] + 1,
+      'col'   : location[ 'column_num' ] + 1,
+      'text'  : ToUtf8IfNeeded( diagnostic[ 'text' ] ),
+      'type'  : diagnostic[ 'kind' ],
+      'valid' : 1
+    }
+
+  return [ ConvertDiagnosticToQfFormat( x ) for x in diagnostics ]
+
+
+# Given a dict like {'a': 1}, loads it into Vim as if you ran 'let g:a = 1'
+# When |overwrite| is True, overwrites the existing value in Vim.
+def LoadDictIntoVimGlobals( new_globals, overwrite = True ):
+  extend_option = '"force"' if overwrite else '"keep"'
+
+  # We need to use json.dumps because that won't use the 'u' prefix on strings
+  # which Vim would bork on.
+  vim.eval( 'extend( g:, {0}, {1})'.format( json.dumps( new_globals ),
+                                            extend_option ) )
+
+
+# Changing the returned dict will NOT change the value in Vim.
+def GetReadOnlyVimGlobals( force_python_objects = False ):
+  if force_python_objects:
+    return vim.eval( 'g:' )
+
+  try:
+    # vim.vars is fairly new so it might not exist
+    return vim.vars
+  except:
+    return vim.eval( 'g:' )
+
+
+def VimExpressionToPythonType( vim_expression ):
+  result = vim.eval( vim_expression )
+  if not isinstance( result, basestring ):
+    return result
+  try:
+    return int( result )
+  except ValueError:
+    return result
 
 
 # Both |line| and |column| need to be 1-based
@@ -59,7 +237,7 @@ def JumpToLocation( filename, line, column ):
   # Add an entry to the jumplist
   vim.command( "normal! m'" )
 
-  if filename != vim.current.buffer.name:
+  if filename != GetCurrentBufferFilepath():
     # We prefix the command with 'keepjumps' so that opening the file is not
     # recorded in the jumplist. So when we open the file and move the cursor to
     # a location in it, the user can use CTRL-O to jump back to the original
@@ -73,14 +251,25 @@ def JumpToLocation( filename, line, column ):
   vim.command( 'normal! zz' )
 
 
-def NumLinesInBuffer( buffer ):
+def NumLinesInBuffer( buffer_object ):
   # This is actually less than obvious, that's why it's wrapped in a function
-  return len( buffer )
+  return len( buffer_object )
 
 
+# Calling this function from the non-GUI thread will sometimes crash Vim. At the
+# time of writing, YCM only uses the GUI thread inside Vim (this used to not be
+# the case).
 def PostVimMessage( message ):
-  vim.command( "echohl WarningMsg | echomsg '{0}' | echohl None"
-               .format( EscapeForVim( message ) ) )
+  vim.command( "echohl WarningMsg | echom '{0}' | echohl None"
+               .format( EscapeForVim( str( message ) ) ) )
+
+
+# Unlike PostVimMesasge, this supports messages with newlines in them because it
+# uses 'echo' instead of 'echomsg'. This also means that the message will NOT
+# appear in Vim's message log.
+def PostMultiLineNotice( message ):
+  vim.command( "echohl WarningMsg | echo '{0}' | echohl None"
+               .format( EscapeForVim( str( message ) ) ) )
 
 
 def PresentDialog( message, choices, default_choice_index = 0 ):
@@ -111,12 +300,29 @@ def Confirm( message ):
   return bool( PresentDialog( message, [ "Ok", "Cancel" ] ) == 0 )
 
 
-def EchoText( text ):
+def EchoText( text, log_as_message = True ):
   def EchoLine( text ):
-    vim.command( "echom '{0}'".format( EscapeForVim( text ) ) )
+    command = 'echom' if log_as_message else 'echo'
+    vim.command( "{0} '{1}'".format( command, EscapeForVim( text ) ) )
 
-  for line in text.split( '\n' ):
+  for line in str( text ).split( '\n' ):
     EchoLine( line )
+
+
+# Echos text but truncates it so that it all fits on one line
+def EchoTextVimWidth( text ):
+  vim_width = GetIntValue( '&columns' )
+  truncated_text = ToUtf8IfNeeded( text )[ : int( vim_width * 0.9 ) ]
+  truncated_text.replace( '\n', ' ' )
+
+  old_ruler = GetIntValue( '&ruler' )
+  old_showcmd = GetIntValue( '&showcmd' )
+  vim.command( 'set noruler noshowcmd' )
+
+  EchoText( truncated_text, False )
+
+  vim.command( 'let &ruler = {0}'.format( old_ruler ) )
+  vim.command( 'let &showcmd = {0}'.format( old_showcmd ) )
 
 
 def EscapeForVim( text ):
@@ -124,15 +330,13 @@ def EscapeForVim( text ):
 
 
 def CurrentFiletypes():
-  ft_string = vim.eval( "&filetype" )
-  return ft_string.split( '.' )
+  return vim.eval( "&filetype" ).split( '.' )
 
 
 def FiletypesForBuffer( buffer_object ):
   # NOTE: Getting &ft for other buffers only works when the buffer has been
   # visited by the user at least once, which is true for modified buffers
-  ft_string = vim.eval( 'getbufvar({0}, "&ft")'.format( buffer_object.number ) )
-  return ft_string.split( '.' )
+  return GetBufferOption( buffer_object, 'ft' ).split( '.' )
 
 
 def GetVariableValue( variable ):
@@ -141,3 +345,8 @@ def GetVariableValue( variable ):
 
 def GetBoolValue( variable ):
   return bool( int( vim.eval( variable ) ) )
+
+
+def GetIntValue( variable ):
+  return int( vim.eval( variable ) )
+

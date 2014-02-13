@@ -1,0 +1,14 @@
+# Compiled stuff
+*.pyc
+*.pyo
+doc/_build
+
+# Crap created by version control
+.orig
+.rej
+
+# OS X
+.DS_Store
+
+# Other *nix:es
+.~
