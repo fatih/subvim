@@ -27,7 +27,7 @@ set showcmd                     " Show me what I'm typing
 set showmode                    " Show current mode.
 
 set noswapfile                  " Don't use swapfile
-set nobackup            		" Don't create annoying backup files
+set nobackup            	" Don't create annoying backup files
 set splitright                  " Split vertical windows right to the current windows
 set splitbelow                  " Split horizontal windows below to the current windows
 set encoding=utf-8              " Set default encoding to UTF-8
@@ -50,11 +50,13 @@ set smartcase                   " ... but not when search pattern contains upper
 let macvim_skip_colorscheme=1
 let g:molokai_original=1
 colorscheme molokai
-highlight SignColumn guibg=#272822   
+highlight SignColumn guibg=#272822
+
+
 
 if has("gui_macvim")
   " No toolbars, menu or scrollbars in the GUI
-  set guifont=Source\ Code\ Pro\ for\ Powerline:h12 "TODO: include these fonts by default
+  set guifont=Source\ Code\ Pro\ for\ Powerline:h12
   set clipboard+=unnamed
   set vb t_vb=
   set guioptions-=m  "no menu
@@ -92,7 +94,7 @@ if has("gui_macvim")
   "Open sidebar with cmd+k
   map <D-k> :NERDTreeTabsToggle<CR>
 
-  " This mapping makes Ctrl-Tab switch between tabs. 
+  " This mapping makes Ctrl-Tab switch between tabs.
   " Ctrl-Shift-Tab goes the other way.
   noremap <C-Tab> :tabnext<CR>
   noremap <C-S-Tab> :tabprev<CR>
@@ -178,8 +180,6 @@ let g:ctrlp_buftag_types = {
 \ 'rc'         : '--language-force=rust --rust-types=fTm'
 \ }
 
-let g:Powerline_symbols = 'fancy'
-
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_min_num_of_chars_for_completion = 1
 
@@ -218,3 +218,8 @@ au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:U
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-e>"
 let g:UltiSnipsSnippetDirectories = ["UltiSnips", "ultisnips-snippets"]
+
+
+" Use airline!!!
+let g:airline_powerline_fonts=1
+let g:airline_theme="molokai"
