@@ -51,23 +51,31 @@ if ${1:condition}${1/(.+)/ /}{
 endsnippet
 
 snippet fn "fmt println" !b
-fmt.Println("${1:${VISUAL}}")${2}
+fmt.Println(${1:${VISUAL}})${2}
 endsnippet
 
 snippet ff "fmt printf" !b
-fmt.Printf("${1:${VISUAL}}", ${2})${3}
+fmt.Printf(${1:${VISUAL}}, ${2})${3}
 endsnippet
 
 snippet ln "log println" !b
-log.Println("${1:${VISUAL}}")${2}
+log.Println(${1:${VISUAL}})${2}
 endsnippet
 
 snippet lf "log printf" !b
-log.Printf("${1:${VISUAL}}", ${2})${3}
+log.Printf(${1:${VISUAL}}, ${2})${3}
 endsnippet
 
-snippet lf "log printf" !b
-log.Printf("${1:${VISUAL}}", ${2})${3}
+snippet err "err clause" !b
+if err != nil {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet ok "ok clause" !b
+if !ok {
+	${0:${VISUAL}}
+}
 endsnippet
 
 snippet type "Type struct" !b
