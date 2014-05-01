@@ -1,4 +1,4 @@
-**This Project is closed and not maintained anymore. I don't find any value in creating a Vim distribution any more. I believe using Vim with plugins and settings for your own need is much more scalable and better in long term. I will occasionally push changes when I have time but don't except any maintenance or future contributions. Thanks everyone for using and supporting this project, feel free to fork and use it on your own.**
+**This Project is closed and not maintained anymore. I don't find any value in creating a Vim distribution any more. I believe using Vim with plugins and settings for your own need is much more scalable and better in long term. I will occasionally push changes when I have time but don't expect any maintenance or future contributions. Thanks everyone for using and supporting this project, feel free to fork and use it on your own.**
 
 ----------
 
